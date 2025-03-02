@@ -1,4 +1,3 @@
-import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {getItem} from '../utils/asyncStorage';
 
@@ -6,10 +5,15 @@ import {getItem} from '../utils/asyncStorage';
 import {NavigationContainer} from '@react-navigation/native';
 // Type of navigation
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 // Screens
 import OnboardingScreen from './screens/OnboardingScreen';
 import HomeScreen from './screens/HomeScreen';
+import LearnerScreen from './screens/LearnerScreen';
+import MentorScreen from './screens/MentorScreen';
+import ProfileScreen from './screens/ProfileScreen';
+import {Image} from 'react-native';
 
 // Type checking: {optional}
 // This is the type of data that other screens can expect
@@ -20,6 +24,7 @@ import HomeScreen from './screens/HomeScreen';
 
 // const Stack = createNativeStackNavigator<RootStackParamList>();
 const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
 export default function App() {
   const [showOnboarding, setShowOnboarding] = useState(null);
@@ -60,21 +65,98 @@ export default function App() {
   } else {
     return (
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home">
-          <Stack.Screen
-            name="Onboarding"
-            options={{headerShown: false}}
-            component={OnboardingScreen}
-          />
-          <Stack.Screen
+        <Tab.Navigator
+          initialRouteName="Home"
+          screenOptions={{
+            animation: 'shift',
+            tabBarStyle: {
+              paddingTop: 6,
+              height: 60,
+              justifyContent: 'center',
+            },
+          }}>
+          <Tab.Screen
             name="Home"
-            options={{headerShown: false}}
+            options={{
+              headerShown: false,
+              title: 'Home',
+              tabBarIcon: ({focused}) => (
+                <Image
+                  source={require('../assets/images/home.png')}
+                  style={{
+                    height: 25,
+                    width: 25,
+                    tintColor: focused ? 'purple' : 'black',
+                  }}
+                />
+              ),
+              tabBarActiveTintColor: 'purple',
+              tabBarInactiveTintColor: 'black',
+            }}
             component={HomeScreen}
           />
-        </Stack.Navigator>
+          <Tab.Screen
+            name="Learner"
+            options={{
+              headerShown: false,
+              title: 'Learner',
+              tabBarIcon: ({focused}) => (
+                <Image
+                  source={require('../assets/images/student.png')}
+                  style={{
+                    height: 28,
+                    width: 28,
+                    tintColor: focused ? 'purple' : 'black',
+                  }}
+                />
+              ),
+              tabBarActiveTintColor: 'purple',
+              tabBarInactiveTintColor: 'black',
+            }}
+            component={LearnerScreen}
+          />
+          <Tab.Screen
+            name="Mentor"
+            options={{
+              headerShown: false,
+              title: 'Mentor',
+              tabBarIcon: ({focused}) => (
+                <Image
+                  source={require('../assets/images/mentor.png')}
+                  style={{
+                    height: 28,
+                    width: 28,
+                    tintColor: focused ? 'purple' : 'black',
+                  }}
+                />
+              ),
+              tabBarActiveTintColor: 'purple',
+              tabBarInactiveTintColor: 'black',
+            }}
+            component={MentorScreen}
+          />
+          <Tab.Screen
+            name="Profile"
+            options={{
+              headerShown: false,
+              title: 'Profile',
+              tabBarIcon: ({focused}) => (
+                <Image
+                  source={require('../assets/images/user.png')}
+                  style={{
+                    height: 25,
+                    width: 25,
+                    tintColor: focused ? 'purple' : 'black',
+                  }}
+                />
+              ),
+              tabBarActiveTintColor: 'purple',
+              tabBarInactiveTintColor: 'black',
+            }}
+            component={ProfileScreen}
+          />
+        </Tab.Navigator>
       </NavigationContainer>
     );
   }
 }
-
-const styles = StyleSheet.create({});

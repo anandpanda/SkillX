@@ -1,20 +1,20 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 
-const HomeScreen = () => {
+const LearnerScreen = () => {
   return (
     <View style={styles.container}>
-      <Text>Home</Text>
+      <Text>LearnerScreen</Text>
     </View>
   );
 };
 
-export default HomeScreen;
+export default LearnerScreen;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'cyan',
+    backgroundColor: 'green',
     justifyContent: 'center',
     alignItems: 'center',
   },
