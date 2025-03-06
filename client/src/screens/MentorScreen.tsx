@@ -85,77 +85,78 @@ const todaySummary = {
 
 const MentorScreen = () => {
   return (
-    <View style={styles.container}>
-      {/* Header */}
-      <Text style={styles.header}>Hello, Prof. Ansh</Text>
+    <ScrollView>
+      <View style={styles.container}>
+        {/* Header */}
+        <Text style={styles.header}>Hello, Prof. Ansh</Text>
 
-      {/* Stats Section */}
-      <View style={styles.statsContainer}>
-        <View style={[styles.statBox, styles.color1]}>
-          <Text style={styles.statNumber}>2</Text>
-          <Text style={styles.statLabel}>Running Courses</Text>
+        {/* Stats Section */}
+        <View style={styles.statsContainer}>
+          <View style={[styles.statBox, styles.color1]}>
+            <Text style={styles.statNumber}>2</Text>
+            <Text style={styles.statLabel}>Running Courses</Text>
+          </View>
+          <View style={[styles.statBox, styles.color2]}>
+            <Text style={styles.statNumber}>90</Text>
+            <Text style={styles.statLabel}>Total Students</Text>
+          </View>
+          <View style={[styles.statBox, styles.color3]}>
+            <Text style={styles.statNumber}>2</Text>
+            <Text style={styles.statLabel}>Upcoming Classes</Text>
+          </View>
         </View>
-        <View style={[styles.statBox, styles.color2]}>
-          <Text style={styles.statNumber}>90</Text>
-          <Text style={styles.statLabel}>Total Students</Text>
-        </View>
-        <View style={[styles.statBox, styles.color3]}>
-          <Text style={styles.statNumber}>2</Text>
-          <Text style={styles.statLabel}>Upcoming Classes</Text>
+
+        {/* Running Courses */}
+        <Text style={styles.sectionTitle}>Running Courses</Text>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.courseList}>
+          {runningCourses.map(course => (
+            <CourseCard key={course.id} course={course} />
+          ))}
+        </ScrollView>
+
+        {/* Scheduled Classes */}
+        <Text style={styles.sectionTitle}>Scheduled Classes</Text>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.courseList}>
+          {scheduledClasses.map(course => (
+            <ScheduledCourseCard key={course.id} course={course} />
+          ))}
+        </ScrollView>
+
+        {/* Today's Summary */}
+        <Text style={styles.sectionTitle}>Today's Summary</Text>
+        <View style={styles.summaryContainer}>
+          <View style={[styles.summaryBox, styles.color1]}>
+            <Text style={styles.summaryNumber}>
+              {todaySummary.studentsPresent}
+            </Text>
+            <Text style={styles.summaryLabel}>Students Present</Text>
+          </View>
+          <View style={[styles.summaryBox, styles.color2]}>
+            <Text style={styles.summaryNumber}>
+              {todaySummary.classesCompleted}
+            </Text>
+            <Text style={styles.summaryLabel}>Classes Completed</Text>
+          </View>
+          <View style={[styles.summaryBox, styles.color3]}>
+            <Text style={styles.summaryNumber}>
+              {todaySummary.assignmentsDue}
+            </Text>
+            <Text style={styles.summaryLabel}>Assignments Due</Text>
+          </View>
         </View>
       </View>
-
-      {/* Running Courses */}
-      <Text style={styles.sectionTitle}>Running Courses</Text>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={styles.courseList}>
-        {runningCourses.map(course => (
-          <CourseCard key={course.id} course={course} />
-        ))}
-      </ScrollView>
-
-      {/* Scheduled Classes */}
-      <Text style={styles.sectionTitle}>Scheduled Classes</Text>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={styles.courseList}>
-        {scheduledClasses.map(course => (
-          <ScheduledCourseCard key={course.id} course={course} />
-        ))}
-      </ScrollView>
-
-      {/* Today's Summary */}
-      <Text style={styles.sectionTitle}>Today's Summary</Text>
-      <View style={styles.summaryContainer}>
-        <View style={[styles.summaryBox, styles.color1]}>
-          <Text style={styles.summaryNumber}>
-            {todaySummary.studentsPresent}
-          </Text>
-          <Text style={styles.summaryLabel}>Students Present</Text>
-        </View>
-        <View style={[styles.summaryBox, styles.color2]}>
-          <Text style={styles.summaryNumber}>
-            {todaySummary.classesCompleted}
-          </Text>
-          <Text style={styles.summaryLabel}>Classes Completed</Text>
-        </View>
-        <View style={[styles.summaryBox, styles.color3]}>
-          <Text style={styles.summaryNumber}>
-            {todaySummary.assignmentsDue}
-          </Text>
-          <Text style={styles.summaryLabel}>Assignments Due</Text>
-        </View>
-      </View>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     padding: 16,
     backgroundColor: 'white',
   },

@@ -49,58 +49,59 @@ const CourseCard: React.FC<{course: Course}> = ({course}) => {
 
 export default function HomeScreen() {
   return (
-    <View style={styles.container}>
-      <Text style={[styles.heading, styles.courseList]}>
-        Popular for Web Developers
-      </Text>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={styles.courseList}>
-        {courses.map(course => (
-          <CourseCard key={course.id} course={course} />
-        ))}
-      </ScrollView>
-      <Text style={[styles.heading, styles.courseList]}>
-        Popular for Web Developers
-      </Text>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={styles.courseList}>
-        {courses.map(course => (
-          <CourseCard key={course.id} course={course} />
-        ))}
-      </ScrollView>
-      <Text style={[styles.heading, styles.courseList]}>
-        Popular for Web Developers
-      </Text>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={styles.courseList}>
-        {courses.map(course => (
-          <CourseCard key={course.id} course={course} />
-        ))}
-      </ScrollView>
-      <Text style={[styles.heading, styles.courseList]}>
-        Popular for Web Developers
-      </Text>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={styles.courseList}>
-        {courses.map(course => (
-          <CourseCard key={course.id} course={course} />
-        ))}
-      </ScrollView>
-    </View>
+    <ScrollView>
+      <View style={styles.container}>
+        <Text style={[styles.heading, styles.courseList]}>
+          Popular for Web Developers
+        </Text>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.courseList}>
+          {courses.map(course => (
+            <CourseCard key={course.id} course={course} />
+          ))}
+        </ScrollView>
+        <Text style={[styles.heading, styles.courseList]}>
+          Popular for Web Developers
+        </Text>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.courseList}>
+          {courses.map(course => (
+            <CourseCard key={course.id} course={course} />
+          ))}
+        </ScrollView>
+        <Text style={[styles.heading, styles.courseList]}>
+          Popular for Web Developers
+        </Text>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.courseList}>
+          {courses.map(course => (
+            <CourseCard key={course.id} course={course} />
+          ))}
+        </ScrollView>
+        <Text style={[styles.heading, styles.courseList]}>
+          Popular for Web Developers
+        </Text>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.courseList}>
+          {courses.map(course => (
+            <CourseCard key={course.id} course={course} />
+          ))}
+        </ScrollView>
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     padding: 10,
   },
   heading: {

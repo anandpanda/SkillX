@@ -15,13 +15,14 @@ import {setItem} from '../../utils/asyncStorage';
 // This will get the current devices width and height
 const {width, height} = Dimensions.get('window');
 
-export default function OnboardingScreen() {
-  const navigation = useNavigation();
+export default function OnboardingScreen({onComplete}) {
+  // const navigation = useNavigation();
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
 
   const handleDone = () => {
-    navigation.navigate('Home');
+    // navigation.navigate('Home');
     setItem('onboarded', '1');
+    onComplete();
   };
 
   const statusBarColors = [

@@ -1,5 +1,14 @@
 import React from 'react';
-import { View, Text, Image, FlatList, TouchableOpacity, ScrollView, StyleSheet, SafeAreaView } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  FlatList,
+  TouchableOpacity,
+  ScrollView,
+  StyleSheet,
+  SafeAreaView,
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 // import type { PropsWithChildren } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -12,12 +21,12 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 const CourseDetailScreen = () => {
   const lessons = [
-    { title: 'Introduction', duration: '2 Min 18 Sec', completed: true },
-    { title: 'What UI UX design?', duration: '18 Min 46 Sec', locked: true },
-    { title: 'How to make wireframe', duration: '20 Min 58 Sec', locked: true },
-    { title: 'Your first design', duration: '15 Min 20 Sec', locked: false },
-    { title: 'How to make wireframe ', duration: '20 Min 58 Sec', locked: true },
-    { title: 'Your first design ', duration: '15 Min 20 Sec', locked: false },
+    {title: 'Introduction', duration: '2 Min 18 Sec', completed: true},
+    {title: 'What UI UX design?', duration: '18 Min 46 Sec', locked: true},
+    {title: 'How to make wireframe', duration: '20 Min 58 Sec', locked: true},
+    {title: 'Your first design', duration: '15 Min 20 Sec', locked: false},
+    {title: 'How to make wireframe ', duration: '20 Min 58 Sec', locked: true},
+    {title: 'Your first design ', duration: '15 Min 20 Sec', locked: false},
   ];
 
   return (
@@ -28,7 +37,9 @@ const CourseDetailScreen = () => {
           {/* Video Preview */}
           <View style={styles.videoContainer}>
             <Image
-              source={{ uri: 'https://media.geeksforgeeks.org/wp-content/cdn-uploads/20200214165928/Web-Development-Course-Thumbnail.jpg' }}
+              source={{
+                uri: 'https://media.geeksforgeeks.org/wp-content/cdn-uploads/20200214165928/Web-Development-Course-Thumbnail.jpg',
+              }}
               style={styles.videoThumbnail}
             />
             <TouchableOpacity style={styles.playButton}>
@@ -56,16 +67,20 @@ const CourseDetailScreen = () => {
           <View style={styles.listContainer}>
             <FlatList
               data={lessons}
-              keyExtractor={(item) => item.title}
-              renderItem={({ item }) => (
+              keyExtractor={item => item.title}
+              renderItem={({item}) => (
                 <View style={styles.lessonContainer}>
                   <Icon name="play-circle" size={24} color="#6C63FF" />
                   <View style={styles.lessonTextContainer}>
                     <Text style={styles.lessonTitle}>{item.title}</Text>
                     <Text style={styles.lessonDuration}>{item.duration}</Text>
                   </View>
-                  {item.completed ? <Icon name="check" size={24} color="green" /> : null}
-                  {item.locked ? <Icon name="lock" size={24} color="gray" /> : null}
+                  {item.completed ? (
+                    <Icon name="check" size={24} color="green" />
+                  ) : null}
+                  {item.locked ? (
+                    <Icon name="lock" size={24} color="gray" />
+                  ) : null}
                 </View>
               )}
               scrollEnabled={false} // Prevents FlatList from causing nested scroll issues
@@ -79,7 +94,9 @@ const CourseDetailScreen = () => {
             <Icon name="bookmark" size={24} color="#fff" />
           </TouchableOpacity>
           <TouchableOpacity style={styles.enrollButton}>
-            <LinearGradient colors={['#6C63FF', '#5145CD']} style={styles.enrollGradient}>
+            <LinearGradient
+              colors={['#6C63FF', '#5145CD']}
+              style={styles.enrollGradient}>
               <Text style={styles.enrollText}>Enroll Now</Text>
             </LinearGradient>
           </TouchableOpacity>
@@ -91,7 +108,6 @@ const CourseDetailScreen = () => {
 
 const styles = StyleSheet.create({
   safeArea: {
-    flex: 1,
     backgroundColor: '#f8f8f8',
   },
   mainContainer: {

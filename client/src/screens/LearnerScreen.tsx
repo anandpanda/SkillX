@@ -1,5 +1,13 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
 
 const courses = [
   {
@@ -7,7 +15,8 @@ const courses = [
     title: 'Public Relations',
     date: 'Tuesday, 13th',
     time: '9:00 - 10:30',
-    image: 'https://media.geeksforgeeks.org/wp-content/cdn-uploads/20200214165928/Web-Development-Course-Thumbnail.jpg', // Replace with actual image URL
+    image:
+      'https://media.geeksforgeeks.org/wp-content/cdn-uploads/20200214165928/Web-Development-Course-Thumbnail.jpg', // Replace with actual image URL
     progress: '9/10 lecture',
   },
   {
@@ -15,59 +24,63 @@ const courses = [
     title: 'Marketing Theory',
     date: 'Tuesday, 13th',
     time: '10:45 - 11:45',
-    image: 'https://media.geeksforgeeks.org/wp-content/cdn-uploads/20200214165928/Web-Development-Course-Thumbnail.jpg', // Replace with actual image URL
-    progress: '' ,
-  }];
+    image:
+      'https://media.geeksforgeeks.org/wp-content/cdn-uploads/20200214165928/Web-Development-Course-Thumbnail.jpg', // Replace with actual image URL
+    progress: '',
+  },
+];
 
 const LearnerScreen = () => {
   return (
-    <View style={styles.container}>
-      {/* Main Course Section */}
-      <View style={styles.greetingContainer}>
-        <Text style={styles.greetingText}>Hello, Mia</Text>
-      </View>
-      <View style={styles.courseContainer}>
-        <Text style={styles.sectionTitle}>Your main course</Text>
-        <View style={styles.mainCourseBox}>
-          <Text style={styles.courseTitle}>Marketing in B2B</Text>
-          <Text style={styles.progressText}>Progress 65%</Text>
-          {/* Custom Progress Bar */}
-          <View style={styles.progressBarContainer}>
-            <View style={[styles.progressBarFill, { width: '65%' }]} />
+    <ScrollView>
+      <View style={styles.container}>
+        {/* Main Course Section */}
+        <View style={styles.greetingContainer}>
+          <Text style={styles.greetingText}>Hello, Mia</Text>
+        </View>
+        <View style={styles.courseContainer}>
+          <Text style={styles.sectionTitle}>Your main course</Text>
+          <View style={styles.mainCourseBox}>
+            <Text style={styles.courseTitle}>Marketing in B2B</Text>
+            <Text style={styles.progressText}>Progress 65%</Text>
+            {/* Custom Progress Bar */}
+            <View style={styles.progressBarContainer}>
+              <View style={[styles.progressBarFill, {width: '65%'}]} />
+            </View>
           </View>
         </View>
+
+        {/* Upcoming Classes */}
+        <Text style={styles.sectionTitle}>Upcoming classes</Text>
+        <FlatList
+          data={courses}
+          horizontal
+          keyExtractor={item => item.id}
+          renderItem={({item}) => (
+            <View style={styles.classCard}>
+              <Image source={{uri: item.image}} style={styles.classImage} />
+              <Text style={styles.classTitle}>{item.title}</Text>
+              <Text style={styles.classDate}>{item.date}</Text>
+              <Text style={styles.classTime}>{item.time}</Text>
+              {item.progress ? (
+                <Text style={styles.classProgress}>{item.progress}</Text>
+              ) : null}
+            </View>
+          )}
+        />
+
+        {/* View Schedule Button */}
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>View the schedule</Text>
+        </TouchableOpacity>
       </View>
-
-      {/* Upcoming Classes */}
-      <Text style={styles.sectionTitle}>Upcoming classes</Text>
-      <FlatList
-        data={courses}
-        horizontal
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <View style={styles.classCard}>
-            <Image source={{ uri: item.image }} style={styles.classImage} />
-            <Text style={styles.classTitle}>{item.title}</Text>
-            <Text style={styles.classDate}>{item.date}</Text>
-            <Text style={styles.classTime}>{item.time}</Text>
-            {item.progress ? <Text style={styles.classProgress}>{item.progress}</Text> : null}
-          </View>
-        )}
-      />
-
-      {/* View Schedule Button */}
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>View the schedule</Text>
-      </TouchableOpacity>
-
-    </View>
+    </ScrollView>
   );
 };
 
 // Styles
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: '#ECECEB',
     padding: 20,
   },
@@ -81,10 +94,10 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
   },
-  helloText:{
-    margin:20 ,
-    flex:1 ,
-  } ,
+  helloText: {
+    margin: 20,
+    flex: 1,
+  },
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
