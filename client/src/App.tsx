@@ -10,6 +10,14 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 // Screens
 import OnboardingScreen from './screens/OnboardingScreen';
 import BottomBar from '../navigation/BottomBar';
+import LoginScreen from './screens/LoginScreen';
+import {ClerkProvider, SignedIn, SignedOut} from '@clerk/clerk-react';
+
+const PUBLISHABLE_KEY = process.env.CLERK_PUBLISHABLE_KEY;
+
+if (!PUBLISHABLE_KEY) {
+  throw new Error('Missing Publishable Key');
+}
 
 // Type checking: {optional}
 // This is the type of data that other screens can expect
@@ -52,7 +60,15 @@ export default function App() {
   return (
     <NavigationContainer>
       {showOnboarding ? (
-        <OnboardingScreen onComplete={handleOnboardingComplete} />
+        // <OnboardingScreen onComplete={handleOnboardingComplete} />
+        <ClerkProvider
+          // need to hide this key in env
+          publishableKey={PUBLISHABLE_KEY}>
+          <SignedOut>
+            <LoginScreen />
+          </SignedOut>
+          <SignedIn></SignedIn>
+        </ClerkProvider>
       ) : (
         <BottomBar />
       )}

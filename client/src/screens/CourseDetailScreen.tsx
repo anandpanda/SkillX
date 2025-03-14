@@ -10,6 +10,7 @@ import {
   SafeAreaView,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+
 // import type { PropsWithChildren } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
