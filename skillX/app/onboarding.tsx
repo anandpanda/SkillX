@@ -20,7 +20,7 @@ export default function OnboardingScreen() {
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
 
   const handleDone = () => {
-    router.replace("/loginScreen");
+    router.replace("/login");
     setItem("onboarded", "1");
   };
 

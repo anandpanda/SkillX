@@ -2,7 +2,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import loginImage from "../assets/images/login.png";
 import googleImage from "../assets/images/google.png";
-
+import { Link } from "expo-router";
 const LoginScreen = () => {
   return (
     <View style={styles.container}>
@@ -12,7 +12,9 @@ const LoginScreen = () => {
         <Text style={styles.subHeading}>Teach.Learn.Exchange</Text>
         <TouchableOpacity style={styles.signInContainer}>
           <Image source={googleImage} style={styles.googleImage} />
-          <Text style={styles.signInText}>Sign in with Google</Text>
+          <Link href={"/(tabs)"}>
+            <Text style={styles.signInText}>Sign in with Google</Text>
+          </Link>
         </TouchableOpacity>
       </View>
     </View>
