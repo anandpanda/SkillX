@@ -1,20 +1,31 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React from "react";
+import React, { useEffect, FC } from "react";
 import loginImage from "../assets/images/login.png";
 import googleImage from "../assets/images/google.png";
 import { Link } from "expo-router";
-const LoginScreen = () => {
+
+// TypeSafety to ensure `login` is a function
+interface LoginScreenProps {
+  login: () => void;
+}
+
+const LoginScreen: FC<LoginScreenProps> = ({ login }) => {
+  const handlePress = () => {
+    if (typeof login === "function") {
+      login();
+    } else {
+      console.error("login prop is not a function");
+    }
+  };
   return (
     <View style={styles.container}>
       <Image source={loginImage} style={styles.loginImage} />
       <View style={styles.colorContainer}>
         <Text style={styles.heading}>SkillX</Text>
         <Text style={styles.subHeading}>Teach.Learn.Exchange</Text>
-        <TouchableOpacity style={styles.signInContainer}>
+        <TouchableOpacity style={styles.signInContainer} onPress={handlePress}>
           <Image source={googleImage} style={styles.googleImage} />
-          <Link href={"/(tabs)"}>
-            <Text style={styles.signInText}>Sign in with Google</Text>
-          </Link>
+          <Text style={styles.signInText}>Login with Google</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -39,6 +50,8 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: "#6857E8",
     alignItems: "center",
+    borderTopRightRadius: "8%",
+    borderTopLeftRadius: "8%",
   },
   heading: {
     marginTop: 30,
@@ -57,12 +70,12 @@ const styles = StyleSheet.create({
     height: 40,
   },
   signInContainer: {
-    width: 300,
+    width: 250,
     backgroundColor: "white",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    padding: 5,
+    padding: 8,
     borderRadius: 50,
     gap: 10,
     marginTop: 100,

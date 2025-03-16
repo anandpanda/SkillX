@@ -19,9 +19,9 @@ export default function OnboardingScreen() {
   const router = useRouter();
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
 
-  const handleDone = () => {
-    router.replace("/login");
-    setItem("onboarded", "1");
+  const handleDone = async () => {
+    await setItem("onboarded", "1");
+    router.replace("/(auth)/sign-in");
   };
 
   const statusBarColors = [
@@ -56,6 +56,7 @@ export default function OnboardingScreen() {
               />
             ),
             title: "Learn.Teach.Exchange",
+            subtitle: "",
           },
           {
             backgroundColor: "#a7f3d0",
@@ -71,6 +72,7 @@ export default function OnboardingScreen() {
             ),
             title:
               "SkillX helps you learn and exchange skills with others for free",
+            subtitle: "",
           },
           {
             backgroundColor: "#fef3c7",
@@ -85,6 +87,7 @@ export default function OnboardingScreen() {
               </View>
             ),
             title: "Teach & Learn For Free !",
+            subtitle: "",
           },
           {
             backgroundColor: "#B771E5",
@@ -99,6 +102,7 @@ export default function OnboardingScreen() {
               </View>
             ),
             title: "Earn Reward Points On Teaching A Skill To Someone !",
+            subtitle: "",
           },
           {
             backgroundColor: "#A1E3F9",
@@ -113,6 +117,7 @@ export default function OnboardingScreen() {
               </View>
             ),
             title: "Find Best Match With AI To Learn New Skills",
+            subtitle: "",
           },
           {
             backgroundColor: "#E8F9FF",
@@ -127,6 +132,7 @@ export default function OnboardingScreen() {
               </View>
             ),
             title: "Schedule , Go live or Watch recorded",
+            subtitle: "",
           },
         ]}
       />
