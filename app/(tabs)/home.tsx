@@ -1,28 +1,40 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import { ScrollView, StyleSheet, Text, View, StatusBar } from "react-native";
+import react from "react";
 import Header from "../Components/HomeScreen/Header";
 import CourseList from "../Components/HomeScreen/CourseList";
 
-const home = () => {
+const Home = () => {
   return (
-    <>
+    <ScrollView showsVerticalScrollIndicator={false}>
+      <StatusBar backgroundColor="#6857E8" barStyle="default" />
       <View style={styles.headerSection}>
         <Header />
       </View>
-      <View>
-        <CourseList level={"basic"} />
+      <View style={styles.courses}>
+        <View style={styles.basicCourse}>
+          <CourseList level={"basic"} />
+        </View>
+        <CourseList level={"advance"} />
       </View>
-    </>
+    </ScrollView>
   );
 };
 
-export default home;
+export default Home;
 
 const styles = StyleSheet.create({
   headerSection: {
     backgroundColor: "#6857E8",
     width: "100%",
-    height: 250,
+    height: 350,
     padding: 20,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+  },
+  courses: {
+    padding: 15,
+  },
+  basicCourse: {
+    marginTop: -180,
   },
 });
