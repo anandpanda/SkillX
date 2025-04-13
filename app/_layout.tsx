@@ -1,6 +1,6 @@
 import { Stack } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { getItem, removeItem } from "../utils/asyncStorage.js";
+import { getItem } from "@/utils/asyncStorage.js";
 import {
   ClerkProvider,
   ClerkLoaded,
@@ -40,13 +40,12 @@ export default function RootLayout() {
     return null;
   }
 
-  // Original code
   return (
     <ClerkProvider publishableKey={publishableKey}>
       <ClerkLoaded>
         {showOnboarding ? (
           <Stack
-            initialRouteName="onboarding"
+            initialRouteName="onboarding" // Corrected route
             screenOptions={{ headerShown: false }}
           >
             <Stack.Screen name="onboarding"></Stack.Screen>
@@ -63,7 +62,7 @@ export default function RootLayout() {
               </Stack>
             </SignedIn>
             <SignedOut>
-              <Stack initialRouteName="(tabs)">
+              <Stack initialRouteName="onboarding">
                 <Stack.Screen
                   name="onboarding"
                   options={{ headerShown: false }}

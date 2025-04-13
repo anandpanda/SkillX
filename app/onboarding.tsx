@@ -1,16 +1,9 @@
-import {
-  Dimensions,
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  StatusBar,
-} from "react-native";
+import { Dimensions, StyleSheet, View, Image, StatusBar } from "react-native";
 import React, { useState } from "react";
 import Onboarding from "react-native-onboarding-swiper";
 import LottieView from "lottie-react-native";
 import { useRouter } from "expo-router";
-import { setItem } from "../utils/asyncStorage";
+import { setItem } from "@/utils/asyncStorage";
 
 // This will get the current devices width and height
 const { width, height } = Dimensions.get("window");
@@ -51,7 +44,7 @@ export default function OnboardingScreen() {
             backgroundColor: "#fff",
             image: (
               <Image
-                source={require("../assets/images/logo.png")}
+                source={require("@/assets/images/logo.png")}
                 style={styles.logo}
               />
             ),
@@ -63,7 +56,7 @@ export default function OnboardingScreen() {
             image: (
               <View style={styles.lottie}>
                 <LottieView
-                  source={require("../assets/animations/onboardingAnimation1.json")}
+                  source={require("@/assets/animations/onboardingAnimation1.json")}
                   autoPlay
                   loop
                   style={{ width: 300, height: 400 }}
@@ -79,7 +72,7 @@ export default function OnboardingScreen() {
             image: (
               <View style={styles.lottie}>
                 <LottieView
-                  source={require("../assets/animations/onboardingAnimation2.json")}
+                  source={require("@/assets/animations/onboardingAnimation2.json")}
                   autoPlay
                   loop
                   style={{ width: 300, height: 400 }}
@@ -94,7 +87,7 @@ export default function OnboardingScreen() {
             image: (
               <View style={styles.lottie}>
                 <LottieView
-                  source={require("../assets/animations/onboardingAnimation3.json")}
+                  source={require("@/assets/animations/onboardingAnimation3.json")}
                   autoPlay
                   loop
                   style={{ width: 300, height: 400 }}
@@ -109,7 +102,7 @@ export default function OnboardingScreen() {
             image: (
               <View style={styles.lottie}>
                 <LottieView
-                  source={require("../assets/animations/onboardingAnimation4.json")}
+                  source={require("@/assets/animations/onboardingAnimation4.json")}
                   autoPlay
                   loop
                   style={{ width: 300, height: 400 }}
@@ -124,7 +117,7 @@ export default function OnboardingScreen() {
             image: (
               <View style={styles.lottie}>
                 <LottieView
-                  source={require("../assets/animations/onboardingAnimation5.json")}
+                  source={require("@/assets/animations/onboardingAnimation5.json")}
                   autoPlay
                   loop
                   style={{ width: 400, height: 400 }}

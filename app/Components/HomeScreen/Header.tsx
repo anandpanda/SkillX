@@ -2,7 +2,7 @@ import { Image, StyleSheet, Text, TextInput, View } from "react-native";
 import React from "react";
 import { useUser } from "@clerk/clerk-expo";
 import Feather from "@expo/vector-icons/Feather";
-import CoinImage from "./../../../assets/images/coin.png";
+import CoinImage from "@/assets/images/coin.png";
 
 const Header = () => {
   const { isLoaded, isSignedIn, user } = useUser();

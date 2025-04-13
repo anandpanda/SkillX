@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, Button, Alert } from "react-native";
 import React from "react";
-import { removeItem } from "../../utils/asyncStorage.js";
+import { removeItem } from "@/utils/asyncStorage";
 import { useRouter } from "expo-router";
 
 const ProfileScreen = () => {

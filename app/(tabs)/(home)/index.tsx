@@ -1,6 +1,6 @@
 import { ScrollView, StyleSheet, View, StatusBar } from "react-native";
-import Header from "../Components/HomeScreen/Header";
-import CourseList from "../Components/HomeScreen/CourseList";
+import Header from "@/app/Components/HomeScreen/Header";
+import CourseList from "@/app/Components/HomeScreen/CourseList";
 
 const Home = () => {
   return (

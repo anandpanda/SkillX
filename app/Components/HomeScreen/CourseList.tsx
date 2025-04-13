@@ -1,8 +1,8 @@
 import { StyleSheet, View, Text, FlatList, Image } from "react-native";
 import React, { useEffect, useState } from "react";
 import getCourseList from "@/app/Services";
-import SubHeading from "../SubHeading";
-import CourseCard from "./CourseCard";
+import SubHeading from "@/app/Components/SubHeading";
+import CourseCard from "@/app/Components/HomeScreen/CourseCard";
 
 interface CourseListProps {
   level: string;

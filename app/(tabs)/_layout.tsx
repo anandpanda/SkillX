@@ -1,18 +1,18 @@
-import { View, Text, Image } from "react-native";
+import { Image } from "react-native";
 import React from "react";
 import { Tabs } from "expo-router";
 
-export default function _layout() {
+export default function layout() {
   return (
-    <Tabs initialRouteName="index">
+    <Tabs>
       <Tabs.Screen
-        name="index"
+        name="(home)"
         options={{
           title: "Home",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <Image
-              source={require("../../assets/images/home.png")}
+              source={require("@/assets/images/home.png")}
               style={{
                 height: 25,
                 width: 25,
@@ -25,13 +25,13 @@ export default function _layout() {
         }}
       ></Tabs.Screen>
       <Tabs.Screen
-        name="learner"
+        name="(learner)"
         options={{
           headerShown: false,
           title: "Learner",
           tabBarIcon: ({ focused }) => (
             <Image
-              source={require("../../assets/images/student.png")}
+              source={require("@/assets/images/student.png")}
               style={{
                 height: 28,
                 width: 28,
@@ -44,13 +44,13 @@ export default function _layout() {
         }}
       ></Tabs.Screen>
       <Tabs.Screen
-        name="mentor"
+        name="(mentor)"
         options={{
           headerShown: false,
           title: "Mentor",
           tabBarIcon: ({ focused }) => (
             <Image
-              source={require("../../assets/images/mentor.png")}
+              source={require("@/assets/images/mentor.png")}
               style={{
                 height: 28,
                 width: 28,
@@ -63,13 +63,13 @@ export default function _layout() {
         }}
       ></Tabs.Screen>
       <Tabs.Screen
-        name="profile"
+        name="(profile)"
         options={{
           headerShown: false,
           title: "Profile",
           tabBarIcon: ({ focused }) => (
             <Image
-              source={require("../../assets/images/user.png")}
+              source={require("@/assets/images/user.png")}
               style={{
                 height: 25,
                 width: 25,

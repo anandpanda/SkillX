@@ -1,8 +1,7 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React, { useEffect, FC } from "react";
-import loginImage from "../assets/images/login.png";
-import googleImage from "../assets/images/google.png";
-import { Link } from "expo-router";
+import React, { FC } from "react";
+import loginImage from "@/assets/images/login.png";
+import googleImage from "@/assets/images/google.png";
 
 // TypeSafety to ensure `login` is a function
 interface LoginScreenProps {
