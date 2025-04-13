@@ -14,6 +14,7 @@ const Home = () => {
         <View style={styles.basicCourse}>
           <CourseList level={"basic"} />
         </View>
+        <CourseList level={"moderate"} />
         <CourseList level={"advance"} />
       </View>
     </ScrollView>
