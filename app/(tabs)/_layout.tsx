@@ -81,25 +81,6 @@ export default function _layout() {
           tabBarInactiveTintColor: "black",
         }}
       ></Tabs.Screen>
-      <Tabs.Screen
-        name="home"
-        options={{
-          headerShown: false,
-          title: "New Home",
-          tabBarIcon: ({ focused }) => (
-            <Image
-              source={require("../../assets/images/user.png")}
-              style={{
-                height: 25,
-                width: 25,
-                tintColor: focused ? "purple" : "black",
-              }}
-            />
-          ),
-          tabBarActiveTintColor: "purple",
-          tabBarInactiveTintColor: "black",
-        }}
-      ></Tabs.Screen>
     </Tabs>
   );
 }
