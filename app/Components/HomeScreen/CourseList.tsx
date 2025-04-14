@@ -1,14 +1,16 @@
-import { StyleSheet, View, Text, FlatList, Image } from "react-native";
+import { StyleSheet, View, FlatList, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import getCourseList from "@/app/Services";
 import SubHeading from "@/app/Components/SubHeading";
 import CourseCard from "@/app/Components/HomeScreen/CourseCard";
+import { useRouter } from "expo-router";
 
 interface CourseListProps {
   level: string;
 }
 
 const CourseList: React.FC<CourseListProps> = ({ level }) => {
+  const router = useRouter();
   const [courseList, setCourseList] = useState([]);
   useEffect(() => {
     getCourses();
@@ -35,7 +37,18 @@ const CourseList: React.FC<CourseListProps> = ({ level }) => {
         key={courseList?.id}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
-        renderItem={({ item }) => <CourseCard item={item} />}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            onPress={() =>
+              router.push({
+                pathname: `/screens/courseDetail`,
+                params: { course: JSON.stringify(item) }, //Complex data objects are always passed like this and parsed at destination
+              })
+            }
+          >
+            <CourseCard item={item} />
+          </TouchableOpacity>
+        )}
       />
     </View>
   );

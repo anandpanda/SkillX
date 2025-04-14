@@ -4,12 +4,11 @@ import { Tabs } from "expo-router";
 
 export default function layout() {
   return (
-    <Tabs>
+    <Tabs screenOptions={{ headerShown: false }}>
       <Tabs.Screen
         name="(home)"
         options={{
           title: "Home",
-          headerShown: false,
           tabBarIcon: ({ focused }) => (
             <Image
               source={require("@/assets/images/home.png")}
@@ -27,7 +26,6 @@ export default function layout() {
       <Tabs.Screen
         name="(learner)"
         options={{
-          headerShown: false,
           title: "Learner",
           tabBarIcon: ({ focused }) => (
             <Image
@@ -46,7 +44,6 @@ export default function layout() {
       <Tabs.Screen
         name="(mentor)"
         options={{
-          headerShown: false,
           title: "Mentor",
           tabBarIcon: ({ focused }) => (
             <Image
@@ -65,7 +62,6 @@ export default function layout() {
       <Tabs.Screen
         name="(profile)"
         options={{
-          headerShown: false,
           title: "Profile",
           tabBarIcon: ({ focused }) => (
             <Image

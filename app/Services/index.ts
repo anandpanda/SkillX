@@ -14,10 +14,23 @@ const getCourseList = async (level: string) => {
                 tags
                 time
                 author
+                description{
+                    markdown
+                }
                 banner {
                     url
                 }
                 chapters {
+                    content{
+                        heading
+                        description{
+                            markdown
+                        }
+                        output{
+                            markdown
+                        }
+                    }
+                    title
                     id
                 }
             }

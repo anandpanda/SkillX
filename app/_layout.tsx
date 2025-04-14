@@ -17,23 +17,17 @@ if (!publishableKey) {
 }
 
 export default function RootLayout() {
-  const [showOnboarding, setShowOnboarding] = useState<undefined | null>(null);
-
-  // const [refresh, setRefresh] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState<boolean | null>(null);
 
   useEffect(() => {
     checkIfOnboarded();
-  }, [setShowOnboarding, showOnboarding]);
+  }, []); // Removed dependencies to avoid unnecessary re-renders
 
   const checkIfOnboarded = async () => {
     let onboarding = await getItem("onboarded");
     console.log(onboarding);
-    if (onboarding === "1") {
-      setShowOnboarding(false);
-    } else {
-      setShowOnboarding(true);
-    }
-    console.log("showOnboarding value:", showOnboarding);
+    setShowOnboarding(onboarding !== "1"); // Simplified state update
+    console.log("showOnboarding value:", onboarding !== "1");
   };
 
   if (showOnboarding == null) {
