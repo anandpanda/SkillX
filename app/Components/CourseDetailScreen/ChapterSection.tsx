@@ -6,7 +6,7 @@ const ChapterSection = ({ courseList }) => {
     <View style={styles.chapterContainer}>
       <Text style={styles.title}>Chapters</Text>
       {courseList.map((item, index) => (
-        <View style={styles.chapterListContainer}>
+        <View style={styles.chapterListContainer} key={item?.id}>
           <View style={styles.chapter}>
             <Text style={styles.textStyle}>{index + 1}</Text>
             <Text style={styles.textStyle}>{item?.title}</Text>
