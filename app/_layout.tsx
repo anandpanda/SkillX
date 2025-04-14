@@ -45,11 +45,11 @@ export default function RootLayout() {
       <ClerkLoaded>
         {showOnboarding ? (
           <Stack
-            initialRouteName="onboarding" // Corrected route
+            initialRouteName="screens/onboarding" // Corrected route
             screenOptions={{ headerShown: false }}
           >
-            <Stack.Screen name="onboarding"></Stack.Screen>
-            <Stack.Screen name="login"></Stack.Screen>
+            <Stack.Screen name="screens/onboarding"></Stack.Screen>
+            <Stack.Screen name="screens/login"></Stack.Screen>
           </Stack>
         ) : (
           <>
@@ -62,13 +62,13 @@ export default function RootLayout() {
               </Stack>
             </SignedIn>
             <SignedOut>
-              <Stack initialRouteName="onboarding">
+              <Stack initialRouteName="screens/onboarding">
                 <Stack.Screen
-                  name="onboarding"
+                  name="screens/onboarding"
                   options={{ headerShown: false }}
                 ></Stack.Screen>
                 <Stack.Screen
-                  name="login"
+                  name="screens/login"
                   options={{ headerShown: false }}
                 ></Stack.Screen>
               </Stack>
