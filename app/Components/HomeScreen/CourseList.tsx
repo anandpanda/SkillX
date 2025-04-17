@@ -1,6 +1,6 @@
 import { StyleSheet, View, FlatList, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
-import getCourseList from "@/app/Services";
+import { getCourseList } from "@/app/Services";
 import SubHeading from "@/app/Components/SubHeading";
 import CourseCard from "@/app/Components/HomeScreen/CourseCard";
 import { useRouter } from "expo-router";
@@ -18,7 +18,6 @@ const CourseList: React.FC<CourseListProps> = ({ level }) => {
 
   const getCourses = () => {
     getCourseList(level).then((data) => {
-      // console.log("Resp : ", data);
       setCourseList(data?.courses);
     });
   };
