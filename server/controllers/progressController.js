@@ -2,7 +2,7 @@ const CourseProgress = require("../schema/CourseProgress");
 
 exports.markLectureComplete = async (req, res) => {
     try {
-        const { userId } = req.auth; // Clerk middleware required
+        const userId = req.auth.userId;
         const { courseId, lectureId } = req.body;
 
         let progress = await CourseProgress.findOne({
@@ -31,8 +31,8 @@ exports.markLectureComplete = async (req, res) => {
 
 exports.getUserProgress = async (req, res) => {
     try {
-        const { userId } = req.auth;
-        const { courseId } = req.params;
+        const userId = req.auth.userId;
+        const { courseId } = req.body;
 
         const progress = await CourseProgress.findOne({
             userId,

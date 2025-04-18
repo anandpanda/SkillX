@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const { createLecture } = require("../controllers/lectureController");
+const lectureController = require("../controllers/lectureController");
 
-// const { withAuth } = require('@clerk/clerk-sdk-node');
-// // example
-// router.post('/mark-complete', withAuth(), markLectureComplete);
+// CREATE a lecture (recorded or live)
+router.post("/", lectureController.createLecture);
 
-router.post("/lectures", createLecture);
+// CONVERT a live lecture to recorded
+router.patch("/convert", lectureController.convertLiveToRecorded);
 
 module.exports = router;
