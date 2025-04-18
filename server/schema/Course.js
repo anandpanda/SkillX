@@ -18,7 +18,7 @@ const courseSchema = new mongoose.Schema({
 
     tags: [{ type: String }],
 
-    chapters: [
+    lectures: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Lecture",

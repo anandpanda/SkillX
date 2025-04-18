@@ -9,7 +9,7 @@ const courseProgressSchema = new mongoose.Schema({
         required: true,
     },
 
-    completedLecture: [
+    completedLectures: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Lecture",
