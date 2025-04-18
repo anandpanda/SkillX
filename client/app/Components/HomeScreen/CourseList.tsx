@@ -6,34 +6,24 @@ import CourseCard from "@/app/Components/HomeScreen/CourseCard";
 import { useRouter } from "expo-router";
 
 interface CourseListProps {
-  level: string;
+  title: string;
+  data: any[]; // Adjust the type as per your data structure
 }
 
-const CourseList: React.FC<CourseListProps> = ({ level }) => {
+const CourseList: React.FC<CourseListProps> = ({ title, data }) => {
   const router = useRouter();
-  const [courseList, setCourseList] = useState([]);
-  useEffect(() => {
-    getCourses();
-  }, []);
-
-  const getCourses = () => {
-    getCourseList(level).then((data) => {
-      setCourseList(data?.courses);
-    });
-  };
-
   return (
     <View>
       <SubHeading
         text={
-          `${level.charAt(0).toUpperCase() + level.slice(1).toLowerCase()}` +
+          `${title.charAt(0).toUpperCase() + title.slice(1).toLowerCase()}` +
           " Courses"
         }
-        color={level == "basic" ? "#ffffff" : "#000000"}
+        color={title == "basic" ? "#ffffff" : "#000000"}
       />
       <FlatList
-        data={courseList}
-        key={courseList?.id}
+        data={data}
+        key={data?._id}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         renderItem={({ item }) => (

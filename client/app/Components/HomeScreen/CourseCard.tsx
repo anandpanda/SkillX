@@ -5,7 +5,7 @@ import Feather from "@expo/vector-icons/Feather";
 const CourseCard = ({ item }) => {
   return (
     <View style={styles.cards}>
-      <Image source={{ uri: item?.banner?.url }} style={styles.cardsImage} />
+      <Image source={{ uri: item?.banner }} style={styles.cardsImage} />
       <View>
         <Text style={[styles.courseTitle]} numberOfLines={1}>
           {item?.name}
@@ -14,14 +14,16 @@ const CourseCard = ({ item }) => {
       <View style={styles.courseDetailContainer}>
         <View style={styles.chapters}>
           <Feather name="book-open" size={20} color="black" />
-          <Text> {item?.chapters?.length} Chapters</Text>
+          <Text> {item?.lectures?.length} Chapters</Text>
         </View>
         <View style={styles.duration}>
           <Feather name="clock" size={20} color="black" />
           <Text>{item?.time}</Text>
         </View>
       </View>
-      <Text style={styles.price}>{item.price == 0 ? "Free" : item?.price}</Text>
+      <Text style={styles.price}>
+        {item.points == 0 ? "Free" : item?.points}
+      </Text>
     </View>
   );
 };
