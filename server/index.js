@@ -1,13 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose');
 require('dotenv').config();
+const lectureRoutes = require('./routes/lectureRoutes'); // Importing the lecture routes
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 const mongoURI = process.env.MONGO_URI || 'mongodb://localhost:27017/attendify_data';
 
 // Middleware
-app.use(express.json());
+app.use(express.json()); // Parse JSON requests
 
 // Mongoose settings
 mongoose.set('strictQuery', false);
@@ -23,26 +24,13 @@ mongoose.connect(mongoURI, {
   process.exit(1);
 });
 
-// Define a flexible schema (non-strict allows any structure)
-const studentSchema = new mongoose.Schema({}, { collection: 'Courses', strict: false });
-const Student = mongoose.model('Courses', studentSchema);
-
 // Routes
 app.get('/', (req, res) => {
   res.send('🚀 Server is running');
 });
 
-// Fetch all students
-app.get('/students', async (req, res) => {
-  try {
-    const students = await Student.find();
-    console.log('📦 Students:', students);
-    res.json(students);
-  } catch (err) {
-    console.error('❌ Error fetching students:', err);
-    res.status(500).send('Error fetching students');
-  }
-});
+// Use the lecture routes (applying the lecture route to the '/api' path)
+app.use('/api', lectureRoutes);
 
 // Handle unknown routes
 app.use((req, res) => {
