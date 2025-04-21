@@ -14,7 +14,7 @@ const Home = () => {
       .get("/courses")
       .then((response) => {
         const allCourses = response.data;
-        console.log("All courses:", allCourses);
+        // console.log("All courses:", allCourses);
 
         // Filter based on level (case-insensitive matching)
         setBasicCourses(

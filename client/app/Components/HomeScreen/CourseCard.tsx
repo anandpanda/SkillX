@@ -3,6 +3,8 @@ import React from "react";
 import Feather from "@expo/vector-icons/Feather";
 
 const CourseCard = ({ item }) => {
+  console.log(item);
+
   return (
     <View style={styles.cards}>
       <Image source={{ uri: item?.banner }} style={styles.cardsImage} />

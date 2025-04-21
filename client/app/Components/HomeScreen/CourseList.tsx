@@ -1,6 +1,5 @@
 import { StyleSheet, View, FlatList, TouchableOpacity } from "react-native";
-import React, { useEffect, useState } from "react";
-import { getCourseList } from "@/app/Services";
+import React from "react";
 import SubHeading from "@/app/Components/SubHeading";
 import CourseCard from "@/app/Components/HomeScreen/CourseCard";
 import { useRouter } from "expo-router";
