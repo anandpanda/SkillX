@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import DetailSection from "../Components/CourseDetailScreen/DetailSection";
-import ChapterSection from "../Components/CourseDetailScreen/ChapterSection";
+import LectureSection from "../Components/CourseDetailScreen/LectureSection";
 import { enrollCourse, getUserEnrolledCourse } from "../Services";
 import { useUser } from "@clerk/clerk-expo";
 
@@ -54,7 +54,7 @@ const courseDetail = () => {
           userEnrolledCourse={userEnrolledCourse}
           enrollCourse={() => UserEnrolledCourse()}
         />
-        <ChapterSection courseList={courseData.lectures} />
+        <LectureSection courseList={courseData.lectures} />
       </ScrollView>
     )
   );

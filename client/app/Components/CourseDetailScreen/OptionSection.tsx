@@ -4,7 +4,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 
 const OptionSection = ({ icon, value }) => {
   return (
-    <View style={styles.chapters}>
+    <View style={styles.lectures}>
       <Ionicons name={icon} size={20} color="black" />
       <Text>{value}</Text>
     </View>
@@ -14,7 +14,7 @@ const OptionSection = ({ icon, value }) => {
 export default OptionSection;
 
 const styles = StyleSheet.create({
-  chapters: {
+  lectures: {
     flexDirection: "row",
     gap: 3,
   },

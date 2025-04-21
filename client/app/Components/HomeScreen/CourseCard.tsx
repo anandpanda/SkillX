@@ -14,9 +14,9 @@ const CourseCard = ({ item }) => {
         </Text>
       </View>
       <View style={styles.courseDetailContainer}>
-        <View style={styles.chapters}>
+        <View style={styles.Lectures}>
           <Feather name="book-open" size={20} color="black" />
-          <Text> {item?.lectures?.length} Chapters</Text>
+          <Text> {item?.lectures?.length} Lectures</Text>
         </View>
         <View style={styles.duration}>
           <Feather name="clock" size={20} color="black" />
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  chapters: {
+  Lectures: {
     flexDirection: "row",
     gap: 3,
   },

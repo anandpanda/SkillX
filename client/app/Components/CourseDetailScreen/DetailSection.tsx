@@ -39,7 +39,7 @@ const DetailSection = ({
         <View style={styles.opt1}>
           <OptionSection
             icon={"book-outline"}
-            value={course?.lectures.length + " Chapters"}
+            value={course?.lectures.length + " Lectures"}
           />
           <OptionSection icon={"time-outline"} value={course?.time} />
         </View>
