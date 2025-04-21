@@ -48,3 +48,20 @@ exports.getUserProgress = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
+// Check if the user is enrolled in a course
+exports.checkEnrollment = async (req, res) => {
+    try {
+        const userId = req.auth.userId;
+        const courseId = req.params.courseId;
+
+        const progress = await CourseProgress.findOne({
+            userId,
+            course: courseId,
+        });
+
+        res.json({ enrolled: !!progress }); // true if enrolled
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};

@@ -1,3 +1,4 @@
+// routes/progressRoutes.js
 const express = require("express");
 const router = express.Router();
 const progressController = require("../controllers/progressController");
@@ -12,5 +13,12 @@ router.post(
 
 // GET user progress for a course
 router.get("/:courseId", requireAuth, progressController.getUserProgress);
+
+// Check if user is enrolled
+router.get(
+    "/enrolled/:courseId",
+    requireAuth,
+    progressController.checkEnrollment
+);
 
 module.exports = router;
