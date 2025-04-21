@@ -3,9 +3,14 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const app = express();
 require("dotenv").config();
+const { clerkMiddleware } = require("@clerk/express");
 
 app.use(cors());
 app.use(express.json());
+
+// Initialize Clerk middleware to handle authentication
+app.use(clerkMiddleware());
+
 
 const courseRoutes = require("./routes/courseRoutes");
 const lectureRoutes = require("./routes/lectureRoutes");

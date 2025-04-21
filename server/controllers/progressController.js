@@ -65,3 +65,40 @@ exports.checkEnrollment = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
+// Enroll the user in a course
+exports.enrollInCourse = async (req, res) => {
+    try {
+        const { courseId } = req.body;
+        const userId = req.auth.userId;
+
+        if (!courseId) {
+            return res.status(400).json({ error: "Course ID is required" });
+        }
+
+        // Check if the user is already enrolled
+        let progress = await CourseProgress.findOne({
+            userId,
+            course: courseId,
+        });
+
+        if (progress) {
+            return res
+                .status(400)
+                .json({ error: "User is already enrolled in this course" });
+        }
+
+        // Enroll the user
+        progress = new CourseProgress({
+            userId,
+            course: courseId,
+            completedLectures: [],
+        });
+
+        await progress.save();
+        res.status(200).json({ message: "Enrolled successfully", progress });
+    } catch (err) {
+        console.error("Error enrolling:", err);
+        res.status(500).json({ error: err.message });
+    }
+};
