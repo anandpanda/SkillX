@@ -8,7 +8,6 @@ const ProfileScreen = () => {
   async function handleReset() {
     await removeItem("onboarded");
     Alert.alert("Reset");
-    router.replace("/screens/onboarding");
   }
   return (
     <View style={styles.container}>

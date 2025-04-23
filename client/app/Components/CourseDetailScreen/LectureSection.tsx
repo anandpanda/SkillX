@@ -9,6 +9,8 @@ import React from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
 const LectureSection = ({ courseList }) => {
+  console.log(courseList);
+
   const router = useRouter();
   return (
     <View style={styles.LectureContainer}>
@@ -18,6 +20,7 @@ const LectureSection = ({ courseList }) => {
           onPress={() =>
             router.push({
               pathname: `/screens/LectureContent`,
+              params: { lecture: JSON.stringify(item) },
             })
           }
         >

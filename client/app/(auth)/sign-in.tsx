@@ -3,6 +3,7 @@ import * as WebBrowser from "expo-web-browser";
 import * as AuthSession from "expo-auth-session";
 import { useSSO } from "@clerk/clerk-expo";
 import LoginScreen from "@/app/screens/login";
+import { useRouter } from "expo-router";
 
 export const useWarmUpBrowser = () => {
   useEffect(() => {
@@ -20,6 +21,7 @@ export const useWarmUpBrowser = () => {
 WebBrowser.maybeCompleteAuthSession();
 
 export default function Page() {
+  const router = useRouter();
   useWarmUpBrowser();
 
   // Use the `useSSO()` hook to access the `startSSOFlow()` method
@@ -38,6 +40,7 @@ export default function Page() {
       // If sign in was successful, set the active session
       if (createdSessionId) {
         setActive!({ session: createdSessionId });
+        router.replace("/(tabs)/(home)");
       } else {
         // If there is no `createdSessionId`,
         // there are missing requirements, such as MFA

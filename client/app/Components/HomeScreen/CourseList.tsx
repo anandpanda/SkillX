@@ -18,7 +18,7 @@ const CourseList: React.FC<CourseListProps> = ({ title, data }) => {
           `${title.charAt(0).toUpperCase() + title.slice(1).toLowerCase()}` +
           " Courses"
         }
-        color={title == "basic" ? "#ffffff" : "#000000"}
+        color={title == "Basic" ? "#ffffff" : "#000000"}
       />
       <FlatList
         data={data}
