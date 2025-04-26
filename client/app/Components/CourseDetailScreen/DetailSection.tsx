@@ -21,12 +21,13 @@ interface Course {
 
 interface DetailSectionProps {
   course: Course;
+  isEnrolled: boolean;
   enrollCourse: () => void;
 }
 
 const DetailSection = ({
   course,
-  userEnrolledCourse,
+  isEnrolled,
   enrollCourse,
 }: DetailSectionProps) => {
   const level = course?.level;
@@ -60,7 +61,7 @@ const DetailSection = ({
         <Text style={styles.description}>{course?.description}</Text>
       </View>
       <View style={styles.actionbtns}>
-        {userEnrolledCourse?.length == 0 ? (
+        {!isEnrolled ? (
           <TouchableOpacity style={styles.enroll} onPress={enrollCourse}>
             <Text style={styles.action_text}>Enroll For Free</Text>
           </TouchableOpacity>

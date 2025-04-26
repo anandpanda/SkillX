@@ -2,37 +2,45 @@ const CourseProgress = require("../schema/CourseProgress");
 
 exports.markLectureComplete = async (req, res) => {
     try {
+        const { lectureId, courseId } = req.body;
         const userId = req.auth.userId;
-        const { courseId, lectureId } = req.body;
 
-        let progress = await CourseProgress.findOne({
+        if (!lectureId || !courseId) {
+            return res
+                .status(400)
+                .json({ error: "Lecture ID and Course ID are required." });
+        }
+
+        const progress = await CourseProgress.findOne({
             userId,
             course: courseId,
         });
 
         if (!progress) {
-            progress = new CourseProgress({
-                userId,
-                course: courseId,
-                completedLectures: [lectureId],
-            });
-        } else {
-            if (!progress.completedLectures.includes(lectureId)) {
-                progress.completedLectures.push(lectureId);
-            }
+            return res.status(404).json({ error: "Enrollment not found." });
         }
 
+        // Check if already completed
+        if (progress.completedLectures.includes(lectureId)) {
+            return res
+                .status(409)
+                .json({ message: "Lecture already marked as complete." });
+        }
+
+        progress.completedLectures.push(lectureId);
         await progress.save();
-        res.status(200).json(progress);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
+
+        res.status(200).json({ message: "Lecture marked as complete." });
+    } catch (error) {
+        console.error("Mark complete error:", error);
+        res.status(500).json({ error: "Server error" });
     }
 };
 
 exports.getUserProgress = async (req, res) => {
     try {
         const userId = req.auth.userId;
-        const { courseId } = req.body;
+        const { courseId } = req.params;
 
         const progress = await CourseProgress.findOne({
             userId,
@@ -46,5 +54,56 @@ exports.getUserProgress = async (req, res) => {
         res.status(200).json(progress);
     } catch (err) {
         res.status(500).json({ error: err.message });
+    }
+};
+
+// Enroll to a course
+exports.enrollToCourse = async (req, res) => {
+    try {
+        const { courseId } = req.body;
+        const userId = req.auth.userId;
+
+        if (!courseId) {
+            return res.status(400).json({ error: "Course ID is required." });
+        }
+
+        const existingProgress = await CourseProgress.findOne({
+            userId,
+            course: courseId,
+        });
+
+        if (existingProgress) {
+            return res.status(409).json({ message: "Already enrolled." });
+        }
+
+        const newProgress = await CourseProgress.create({
+            userId,
+            course: courseId,
+            completedLectures: [],
+        });
+
+        return res
+            .status(201)
+            .json({ message: "Enrolled successfully", progress: newProgress });
+    } catch (error) {
+        console.error("Enrollment error:", error);
+        res.status(500).json({ error: "Server error" });
+    }
+};
+
+exports.checkEnrollment = async (req, res) => {
+    try {
+        const userId = req.auth.userId;
+        const { courseId } = req.params;
+
+        const progress = await CourseProgress.findOne({
+            userId,
+            course: courseId,
+        });
+
+        res.status(200).json({ enrolled: !!progress });
+    } catch (error) {
+        console.error("Check enrollment error:", error);
+        res.status(500).json({ error: "Server error" });
     }
 };

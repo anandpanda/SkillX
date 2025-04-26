@@ -10,7 +10,17 @@ router.post(
     progressController.markLectureComplete
 );
 
-// GET user progress for a course
+// GET user progress for a course (courseId is in the params)
 router.get("/:courseId", requireAuth, progressController.getUserProgress);
+
+// Enroll to a course
+router.post("/enroll", requireAuth, progressController.enrollToCourse);
+
+// CHECK enrollment
+router.get(
+    "/enrolled/:courseId",
+    requireAuth,
+    progressController.checkEnrollment
+);
 
 module.exports = router;
