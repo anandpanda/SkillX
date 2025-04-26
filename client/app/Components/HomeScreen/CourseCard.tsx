@@ -20,7 +20,7 @@ const CourseCard = ({ item }) => {
         </View>
         <View style={styles.duration}>
           <Feather name="clock" size={20} color="black" />
-          <Text>{item?.time}</Text>
+          <Text>{item?.time} Hours</Text>
         </View>
       </View>
       <Text style={styles.price}>

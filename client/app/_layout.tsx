@@ -1,6 +1,7 @@
 import { ClerkProvider } from "@clerk/clerk-expo";
-import { Stack } from "expo-router";
+import { Slot, Stack } from "expo-router";
 import React from "react";
+import Toast from "react-native-toast-message";
 
 const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!;
 
@@ -12,6 +13,7 @@ export default function Layout() {
   return (
     <ClerkProvider publishableKey={publishableKey}>
       <Stack screenOptions={{ headerShown: false }} />
+      <Toast />
     </ClerkProvider>
   );
 }

@@ -21,7 +21,7 @@ const Home = () => {
           allCourses.filter((course) => course.level === "Beginner")
         );
         setModerateCourses(
-          allCourses.filter((course) => course.level === "Intermediate")
+          allCourses.filter((course) => course.level === "Moderate")
         );
         setAdvancedCourses(
           allCourses.filter((course) => course.level === "Advanced")

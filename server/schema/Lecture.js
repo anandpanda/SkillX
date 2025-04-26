@@ -15,7 +15,7 @@ const lectureSchema = new mongoose.Schema({
 
     // For live
     meetingLink: { type: String },
-    scheduledAt: { type: Date },
+    scheduledAt: { type: String },
 
     duration: { type: String },
 });

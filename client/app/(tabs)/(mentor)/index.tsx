@@ -1,154 +1,163 @@
-import React from 'react';
+import React, { useState, useCallback } from "react";
 import {
   View,
   Text,
-  FlatList,
+  TextInput,
+  TouchableOpacity,
   StyleSheet,
-  Image,
   ScrollView,
-} from 'react-native';
+} from "react-native";
+import api from "@/app/Services/api";
+import { useRouter } from "expo-router";
+import { Picker } from "@react-native-picker/picker";
+import { useFocusEffect } from "expo-router";
+import Toast from "react-native-toast-message";
 
-// Sample Data
-interface Course {
-  id: string;
-  title: string;
-  image: string;
-  students: number;
-}
+const CreateCourseScreen = () => {
+  const router = useRouter();
 
-const runningCourses: Course[] = [
-  {
-    id: '1',
-    title: 'Mathematics for Engineers',
-    students: 50,
-    image:
-      'https://media.geeksforgeeks.org/wp-content/cdn-uploads/20200214165928/Web-Development-Course-Thumbnail.jpg',
-  },
-  {
-    id: '2',
-    title: 'Business Marketing',
-    students: 40,
-    image:
-      'https://media.geeksforgeeks.org/wp-content/cdn-uploads/20200214165928/Web-Development-Course-Thumbnail.jpg',
-  },
-];
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [banner, setBanner] = useState("");
+  const [time, setTime] = useState("");
+  const [points, setPoints] = useState("");
+  const [author, setAuthor] = useState("");
+  const [level, setLevel] = useState("Beginner");
+  const [tags, setTags] = useState("");
+  const [scheduledDateStr, setScheduledDateStr] = useState(""); // e.g. "2025-04-30"
 
-interface ScheduledCourse {
-  id: string;
-  title: string;
-  image: string;
-  time: string;
-}
+  const handleSubmit = async () => {
+    if (
+      !name ||
+      !description ||
+      !banner ||
+      !time ||
+      !points ||
+      !author ||
+      !tags ||
+      !scheduledDateStr
+    ) {
+      Toast.show({
+        type: "error",
+        text1: "Missing Field",
+        text2: "Please fill out all fields before creating the course.",
+      });
+      return;
+    }
+    const courseData = {
+      name,
+      description,
+      banner,
+      time,
+      points,
+      author,
+      level,
+      tags: tags.split(",").map((tag) => tag.trim()),
+      scheduledAt: new Date(scheduledDateStr).toISOString(),
+    };
 
-const scheduledClasses: ScheduledCourse[] = [
-  {
-    id: '1',
-    title: 'Algebra Basics',
-    time: '10:00 - 11:00 AM',
-    image:
-      'https://media.geeksforgeeks.org/wp-content/cdn-uploads/20200214165928/Web-Development-Course-Thumbnail.jpg',
-  },
-  {
-    id: '2',
-    title: 'Digital Marketing',
-    time: '2:00 - 3:00 PM',
-    image:
-      'https://media.geeksforgeeks.org/wp-content/cdn-uploads/20200214165928/Web-Development-Course-Thumbnail.jpg',
-  },
-];
+    try {
+      const response = await api.post("/courses", courseData);
+      console.log("Course Created:", response.data);
+      router.push({
+        pathname: `/screens/addLectureScreen`,
+        params: { courseId: response.data._id },
+      });
+    } catch (error) {
+      console.error(
+        "Error creating course:",
+        error?.response?.data || error.message || error
+      );
+    }
+  };
 
-const CourseCard: React.FC<{course: Course}> = ({course}) => {
-  return (
-    <View style={styles.card}>
-      <Image source={{uri: course.image}} style={styles.image} />
-      <Text style={styles.title}>{course.title}</Text>
-      <Text style={styles.title}>Students Enrolled : {course.students}</Text>
-    </View>
+  const resetForm = () => {
+    setName("");
+    setDescription("");
+    setBanner("");
+    setTime("");
+    setPoints("");
+    setAuthor("");
+    setLevel("Beginner");
+    setTags("");
+    setScheduledDateStr("");
+  };
+
+  useFocusEffect(
+    // usecallback helps in preventing recreation of function unecessarliy when , the component re-renders
+    useCallback(() => {
+      resetForm();
+    }, [])
   );
-};
 
-const ScheduledCourseCard: React.FC<{course: ScheduledCourse}> = ({course}) => {
   return (
-    <View style={styles.card}>
-      <Image source={{uri: course.image}} style={styles.image} />
-      <Text style={styles.title}>{course.title}</Text>
-      <Text style={styles.title}>Time : {course.time}</Text>
-    </View>
-  );
-};
-
-const todaySummary = {
-  studentsPresent: 75,
-  classesCompleted: 3,
-  assignmentsDue: 2,
-};
-
-const MentorScreen = () => {
-  return (
-    <ScrollView>
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.container}>
-        {/* Header */}
-        <Text style={styles.header}>Hello, Prof. Ansh</Text>
+        <Text style={styles.header}>🎯 Create New Course</Text>
+        <View style={styles.formContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="Course Name"
+            value={name}
+            onChangeText={setName}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Description"
+            value={description}
+            onChangeText={setDescription}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Banner URL"
+            value={banner}
+            onChangeText={setBanner}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Time"
+            value={time}
+            onChangeText={setTime}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Points"
+            value={points}
+            onChangeText={setPoints}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Author"
+            value={author}
+            onChangeText={setAuthor}
+          />
+          <View style={styles.pickerContainer}>
+            <Picker
+              selectedValue={level}
+              onValueChange={(itemValue) => setLevel(itemValue)}
+              style={styles.picker}
+            >
+              <Picker.Item label="Beginner" value="Beginner" />
+              <Picker.Item label="Moderate" value="Moderate" />
+              <Picker.Item label="Advanced" value="Advanced" />
+            </Picker>
+          </View>
+          <TextInput
+            style={styles.input}
+            placeholder="Tags (comma separated)"
+            value={tags}
+            onChangeText={setTags}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Scheduled Date (YYYY-MM-DD)"
+            value={scheduledDateStr}
+            onChangeText={setScheduledDateStr}
+          />
 
-        {/* Stats Section */}
-        <View style={styles.statsContainer}>
-          <View style={[styles.statBox, styles.color1]}>
-            <Text style={styles.statNumber}>2</Text>
-            <Text style={styles.statLabel}>Running Courses</Text>
-          </View>
-          <View style={[styles.statBox, styles.color2]}>
-            <Text style={styles.statNumber}>90</Text>
-            <Text style={styles.statLabel}>Total Students</Text>
-          </View>
-          <View style={[styles.statBox, styles.color3]}>
-            <Text style={styles.statNumber}>2</Text>
-            <Text style={styles.statLabel}>Upcoming Classes</Text>
-          </View>
-        </View>
-
-        {/* Running Courses */}
-        <Text style={styles.sectionTitle}>Running Courses</Text>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          style={styles.courseList}>
-          {runningCourses.map(course => (
-            <CourseCard key={course.id} course={course} />
-          ))}
-        </ScrollView>
-
-        {/* Scheduled Classes */}
-        <Text style={styles.sectionTitle}>Scheduled Classes</Text>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          style={styles.courseList}>
-          {scheduledClasses.map(course => (
-            <ScheduledCourseCard key={course.id} course={course} />
-          ))}
-        </ScrollView>
-
-        {/* Today's Summary */}
-        <Text style={styles.sectionTitle}>Today's Summary</Text>
-        <View style={styles.summaryContainer}>
-          <View style={[styles.summaryBox, styles.color1]}>
-            <Text style={styles.summaryNumber}>
-              {todaySummary.studentsPresent}
-            </Text>
-            <Text style={styles.summaryLabel}>Students Present</Text>
-          </View>
-          <View style={[styles.summaryBox, styles.color2]}>
-            <Text style={styles.summaryNumber}>
-              {todaySummary.classesCompleted}
-            </Text>
-            <Text style={styles.summaryLabel}>Classes Completed</Text>
-          </View>
-          <View style={[styles.summaryBox, styles.color3]}>
-            <Text style={styles.summaryNumber}>
-              {todaySummary.assignmentsDue}
-            </Text>
-            <Text style={styles.summaryLabel}>Assignments Due</Text>
-          </View>
+          <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+            <Text style={styles.buttonText}>🚀 Create Course</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </ScrollView>
@@ -156,150 +165,66 @@ const MentorScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  scrollContainer: {
+    flexGrow: 1,
+    backgroundColor: "#F5F7FA",
+  },
   container: {
-    padding: 16,
-    backgroundColor: 'white',
+    flex: 1,
+    justifyContent: "center",
+    padding: 20,
   },
-  courseList: {
-    padding: 8,
-  },
-  image: {
-    width: '100%',
-    height: 100,
-    borderRadius: 8,
-  },
-  title: {
-    fontSize: 13,
-    fontWeight: 'bold',
-    marginTop: 5,
-  },
-  card: {
-    width: 225,
-    marginRight: 15,
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    padding: 10,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+  formContainer: {
+    padding: 20,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 16,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowRadius: 6,
     elevation: 5,
   },
   header: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    fontSize: 28,
+    fontWeight: "bold",
     marginBottom: 20,
+    textAlign: "center",
+    color: "#4B3F72",
   },
-  statsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  input: {
+    height: 48,
+    borderColor: "#D1D5DB",
+    borderWidth: 1,
     marginBottom: 15,
-    marginLeft: 10,
-  },
-  statBox: {
-    backgroundColor: 'white',
-    padding: 15,
     borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '30%',
-    elevation: 3,
-    // borderWidth: 2,
-    // borderColor:'yellow',
-  },
-  color1: {
-    backgroundColor: '#fe8181',
-  },
-  color2: {
-    backgroundColor: '#bad012',
-  },
-  color3: {
-    backgroundColor: '#f0db2e',
-  },
-  statNumber: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: 'white', // Inner text color
-    textShadowColor: 'black', // Outline color
-    textShadowOffset: {width: -1, height: 1},
-    textShadowRadius: 1,
-  },
-  statLabel: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: 'white', // Inner text color
-    textShadowColor: 'black', // Outline color
-    textShadowOffset: {width: -1, height: 1},
-    textShadowRadius: 1,
-    textAlign: 'center',
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginTop: 15,
-    marginBottom: 5,
-    paddingLeft: 8,
-  },
-  courseCard: {
-    backgroundColor: 'white',
-    padding: 15,
-    borderRadius: 8,
-    marginBottom: 10,
-    elevation: 3,
-  },
-  courseTitle: {
+    paddingHorizontal: 14,
+    backgroundColor: "#F9FAFB",
     fontSize: 16,
-    fontWeight: 'bold',
   },
-  courseStudents: {
-    fontSize: 14,
-    color: 'gray',
-  },
-  scheduleCard: {
-    backgroundColor: 'white',
-    padding: 15,
-    borderRadius: 8,
-    marginBottom: 10,
-    elevation: 3,
-  },
-  classSubject: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  classTime: {
-    fontSize: 14,
-    color: 'gray',
-  },
-  summaryContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  button: {
+    backgroundColor: "#6C63FF",
+    paddingVertical: 14,
+    borderRadius: 10,
     marginTop: 10,
-    marginLeft: 10,
+    alignItems: "center",
   },
-  summaryBox: {
-    padding: 15,
+  buttonText: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  pickerContainer: {
+    borderWidth: 1,
+    borderColor: "#D1D5DB",
     borderRadius: 8,
-    alignItems: 'center',
-    width: '30%',
-    elevation: 3,
+    marginBottom: 15,
+    backgroundColor: "#F9FAFB",
+    overflow: "hidden",
   },
-  summaryNumber: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: 'white', // Inner text color
-    textShadowColor: 'black', // Outline color
-    textShadowOffset: {width: -1, height: 1},
-    textShadowRadius: 1,
-  },
-  summaryLabel: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: 'white', // Inner text color
-    textShadowColor: 'black', // Outline color
-    textShadowOffset: {width: -1, height: 1},
-    textShadowRadius: 1,
-    textAlign: 'center',
+  picker: {
+    height: 55,
+    paddingHorizontal: 14,
   },
 });
 
-export default MentorScreen;
+export default CreateCourseScreen;
