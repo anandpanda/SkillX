@@ -1,4 +1,5 @@
 const CourseProgress = require("../schema/CourseProgress");
+const Course = require("../schema/Course");
 
 exports.markLectureComplete = async (req, res) => {
     try {
@@ -81,6 +82,15 @@ exports.enrollToCourse = async (req, res) => {
             course: courseId,
             completedLectures: [],
         });
+
+        // add user to course enrolledStudents
+        const course = await Course.findById(courseId);
+        if (!course) {
+            return res.status(404).json({ error: "Course not found." });
+        }
+
+        course.enrolledStudents.push(userId);
+        await course.save();
 
         return res
             .status(201)

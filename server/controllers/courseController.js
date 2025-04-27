@@ -33,6 +33,34 @@ exports.getAllCourses = async (req, res) => {
     }
 };
 
+exports.getCoursesByAuthor = async (req, res) => {
+    try {
+        const { authorName } = req.params;
+        console.log(authorName);
+
+        const courses = await Course.find({ author: authorName }).populate(
+            "lectures"
+        );
+
+        if (!courses)
+            return res.status(404).json({ error: "No courses found" });
+
+        let studentsCount = 0;
+        courses.forEach((course) => {
+            const enrolledStudents = course.enrolledStudents || [];
+            studentsCount += enrolledStudents.length;
+        });
+
+        console.log(courses);
+
+        console.log({ data: { courses, studentsCount } });
+
+        res.json({ courses, studentsCount });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
 exports.getCourseById = async (req, res) => {
     try {
         const course = await Course.findById(req.params.id).populate(

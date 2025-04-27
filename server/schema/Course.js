@@ -8,7 +8,9 @@ const courseSchema = new mongoose.Schema({
     time: { type: String, required: true },
     points: { type: String },
 
-    author: { type: String, required: true }, // Clerk User ID
+    author: { type: String, required: true }, // Should have been Clerk User Name
+    
+    enrolledStudents: [{ type: String }], // Array of Clerk User IDs
 
     level: {
         type: String,
