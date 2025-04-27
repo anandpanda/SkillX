@@ -8,6 +8,15 @@ import {
 import React from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
+
+// Utility function to truncate text after a certain number of characters
+const truncateText = (text, maxLength) => {
+  if (text.length > maxLength) {
+    return text.slice(0, maxLength) + "..."; // Truncate and add ellipsis
+  }
+  return text;
+};
+
 const LectureSection = ({ courseList }) => {
   console.log(courseList);
 
@@ -17,17 +26,20 @@ const LectureSection = ({ courseList }) => {
       <Text style={styles.title}>Lectures</Text>
       {courseList.map((item, index) => (
         <TouchableOpacity
+          key={`${item?._id}-${index}`}
           onPress={() =>
             router.push({
-              pathname: `/screens/lectureContent`,
+              pathname: `/pages/LectureContent`,
               params: { lecture: JSON.stringify(item) },
             })
           }
         >
-          <View style={styles.LectureListContainer} key={item?._id}>
+          <View style={styles.LectureListContainer}>
             <View style={styles.Lecture}>
-              <Text style={styles.textStyle}>{index + 1}</Text>
-              <Text style={styles.textStyle}>{item?.title}</Text>
+              <Text style={styles.textStyle}>Chapter {index + 1}:</Text>
+              <Text style={styles.textStyle}>
+                {truncateText(item?.title, 20)}{" "}
+              </Text>
             </View>
             <Ionicons name="lock-closed" size={24} color="gray" />
           </View>
@@ -50,15 +62,17 @@ const styles = StyleSheet.create({
   LectureListContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    padding: 15,
+    alignItems: "center",
+    padding: 12,
     borderWidth: 1,
     borderRadius: 10,
     borderColor: "gray",
-    margin: 4,
+    marginBottom: 8,
   },
   Lecture: {
     flexDirection: "row",
     gap: 5,
+    flexWrap: "wrap",
   },
   textStyle: {
     fontSize: 16,
@@ -69,6 +83,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "600",
     marginTop: 5,
-    marginBottom: 2,
+    marginBottom: 10,
   },
 });
