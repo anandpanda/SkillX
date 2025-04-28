@@ -42,6 +42,24 @@ export default function layout() {
         }}
       ></Tabs.Screen>
       <Tabs.Screen
+        name="(ai)"
+        options={{
+          title: "AI",
+          tabBarIcon: ({ focused }) => (
+            <Image
+              source={require("@/assets/images/ai.png")}
+              style={{
+                height: 35,
+                width: 35,
+                tintColor: focused ? "purple" : "black",
+              }}
+            />
+          ),
+          tabBarActiveTintColor: "purple",
+          tabBarInactiveTintColor: "black",
+        }}
+      ></Tabs.Screen>
+      <Tabs.Screen
         name="(mentor)"
         options={{
           title: "Mentor",
