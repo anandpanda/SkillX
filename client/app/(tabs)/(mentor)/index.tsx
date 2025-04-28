@@ -60,7 +60,7 @@ const CreateCourseScreen = () => {
       const response = await api.post("/courses", courseData);
       console.log("Course Created:", response.data);
       router.push({
-        pathname: `/screens/addLectureScreen`,
+        pathname: `/pages/addLectureScreen`,
         params: { courseId: response.data._id },
       });
     } catch (error) {

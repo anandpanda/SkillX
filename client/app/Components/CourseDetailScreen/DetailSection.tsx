@@ -11,7 +11,7 @@ import OptionSection from "./OptionSection";
 
 interface Course {
   banner: string;
-  title: string;
+  name: string;
   lectures: { length: number };
   time: string;
   author: string;
@@ -32,10 +32,11 @@ const DetailSection = ({
 }: DetailSectionProps) => {
   const level = course?.level;
   const author = course?.author;
+  console.log(course);
   return (
     <View style={styles.CourseDetailSection}>
       <Image source={{ uri: course?.banner }} style={styles.courseImage} />
-      <Text style={styles.courseTitle}>{course?.title}</Text>
+      <Text style={styles.courseTitle}>{course?.name}</Text>
       <View>
         <View style={styles.opt1}>
           <OptionSection
