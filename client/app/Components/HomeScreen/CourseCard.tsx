@@ -11,11 +11,12 @@ interface CourseCardProps {
     time: string;
     points: number;
   };
+  style?: any;
 }
 
-const CourseCard: React.FC<CourseCardProps> = ({ item }) => {
+const CourseCard: React.FC<CourseCardProps> = ({ item, style }) => {
   return (
-    <View style={styles.card}>
+    <View style={[styles.card, style]}>
       <Image source={{ uri: item?.banner }} style={styles.cardImage} />
       <Text style={styles.courseTitle} numberOfLines={1}>
         {item?.name}
