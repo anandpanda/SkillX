@@ -1,126 +1,138 @@
-import React from "react";
+import React, { useRef } from "react";
 import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  ScrollView,
-  Dimensions,
+    StyleSheet,
+    Text,
+    View,
+    TouchableOpacity,
+    ScrollView,
+    Dimensions,
+    Platform,
 } from "react-native";
-import VideoPlayer from "expo-video-player";
-import { ResizeMode } from "expo-av";
+import { Video, ResizeMode } from "expo-av";
+import * as ScreenOrientation from "expo-screen-orientation";
+import { useLocalSearchParams } from "expo-router";
 
-const dummyLectureData = {
-  _id: "680254ea0c1e646142fff6d5",
-  title: "Intro to JSX",
-  description: "What is JSX and how it works",
-  duration: "20 mins",
-  type: "recorded",
-  videoLink:
-    "https://res.cloudinary.com/your-cloud-name/video/upload/v1700000000/sample.mp4", // Replace this with your Cloudinary URL
-};
+const { width } = Dimensions.get("window");
 
 const LectureContent = () => {
-  return (
-    <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <Text style={styles.title}>{dummyLectureData.title}</Text>
-        <Text style={styles.duration}>{dummyLectureData.duration}</Text>
-        <Text style={styles.description}>{dummyLectureData.description}</Text>
+    const videoRef = useRef(null);
+    const { lecture } = useLocalSearchParams();
+    const lectureData = JSON.parse(lecture as string);
 
-        <View style={styles.videoContainer}>
-          <VideoPlayer
-            videoProps={{
-              shouldPlay: true,
-              resizeMode: ResizeMode.CONTAIN,
-              source: {
-                uri: dummyLectureData.videoLink, // Cloudinary video URL
-              },
-            }}
-            style={styles.video}
-          />
-        </View>
-      </ScrollView>
+    const handleFullscreenUpdate = async (event) => {
+        if (event.fullscreenUpdate === 1) {
+            await ScreenOrientation.lockAsync(
+                ScreenOrientation.OrientationLock.LANDSCAPE
+            );
+        } else if (event.fullscreenUpdate === 3) {
+            await ScreenOrientation.lockAsync(
+                ScreenOrientation.OrientationLock.PORTRAIT_UP
+            );
+        }
+    };
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => {
-          console.log("Next chapter clicked");
-        }}
-      >
-        <Text style={styles.buttonText}>Next Chapter</Text>
-      </TouchableOpacity>
-    </View>
-  );
+    return (
+      <View style={styles.container}>
+        <ScrollView
+          contentContainerStyle={styles.scrollContainer}
+          showsVerticalScrollIndicator={false}
+        >
+          <Text style={styles.title}>{lectureData.title}</Text>
+          <Text style={styles.duration}>⏱ {lectureData.duration}</Text>
+          <Text style={styles.description}>{lectureData.description}</Text>
+    
+          <View style={styles.centerWrap}>
+            <View style={styles.videoWrapper}>
+              <Video
+                ref={videoRef}
+                source={{ uri: lectureData.videoLink }}
+                useNativeControls
+                resizeMode={ResizeMode.CONTAIN}
+                style={styles.video}
+                shouldPlay
+                onFullscreenUpdate={handleFullscreenUpdate}
+              />
+            </View>
+    
+            <TouchableOpacity
+              style={styles.nextButton}
+              onPress={() => {
+                console.log("Next chapter clicked");
+              }}
+            >
+              <Text style={styles.nextButtonText}>Next Chapter →</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </View>
+    );
 };
 
 export default LectureContent;
 
-const { width, height } = Dimensions.get("window");
-
 const styles = StyleSheet.create({
-  container: {
-    flex: 1, // Use flex to allow the ScrollView to take the available space
-    backgroundColor: "#f5f5f5",
-    justifyContent: "space-between", // This ensures the button is pushed to the bottom
-  },
-  scrollContainer: {
-    padding: 20,
-    paddingBottom: 100, // Give some space at the bottom so the button doesn't overlap
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: "700",
-    marginBottom: 8,
-    color: "#2c3e50",
-    textAlign: "center",
-  },
-  duration: {
-    fontSize: 14,
-    marginBottom: 12,
-    color: "#7f8c8d",
-    textAlign: "center",
-    fontStyle: "italic",
-  },
-  description: {
-    fontSize: 16,
-    marginBottom: 24,
-    color: "#34495e",
-    textAlign: "center",
-    lineHeight: 24,
-    fontWeight: "300",
-  },
-  videoContainer: {
-    width: "100%",
-    aspectRatio: 16 / 9,
-    marginBottom: 24,
-    borderRadius: 12,
-    overflow: "hidden",
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 4,
-  },
-  video: {
-    width: width - 40,
-    height: ((width - 40) * 9) / 16,
-    borderRadius: 12,
-  },
-  button: {
-    backgroundColor: "#3498db",
-    paddingVertical: 16,
-    paddingHorizontal: 40,
-    borderRadius: 50,
-    alignItems: "center",
-    marginBottom: 30, // Space at the bottom to make the button fit
-    shadowColor: "#2980b9",
-    shadowOpacity: 0.3,
-    shadowRadius: 10,
-    elevation: 5,
-  },
-  buttonText: {
-    color: "#fff",
-    fontSize: 18,
-    fontWeight: "600",
-  },
+    container: {
+        flex: 1,
+        backgroundColor: "#ffffff",
+    },
+    
+    scrollContainer: {
+        paddingHorizontal: 20,
+        paddingTop: 40,
+        paddingBottom: 60,
+    },
+    title: {
+        fontSize: 26,
+        fontWeight: "bold",
+        color: "#1e1e1e",
+        marginBottom: 6,
+        textAlign: "center",
+    },
+    duration: {
+        fontSize: 14,
+        color: "#888",
+        textAlign: "center",
+        marginBottom: 10,
+    },
+    description: {
+        fontSize: 16,
+        color: "#4a4a4a",
+        lineHeight: 24,
+        textAlign: "center",
+        marginBottom: 24,
+        paddingHorizontal: 10,
+    },
+    videoWrapper: {
+        borderRadius: 16,
+        overflow: "hidden",
+        shadowColor: "#000",
+        shadowOpacity: 0.1,
+        shadowOffset: { width: 0, height: 2 },
+        shadowRadius: 8,
+        elevation: 5,
+        backgroundColor: "#000",
+        marginBottom: 30,
+    },
+    video: {
+        width: width - 40,
+        height: ((width - 40) * 9) / 16,
+        alignSelf: "center",
+    },
+    nextButton: {
+        backgroundColor: "#2563eb",
+        paddingVertical: 14,
+        borderRadius: 12,
+        alignItems: "center",
+        justifyContent: "center",
+        shadowColor: "#2563eb",
+        shadowOpacity: Platform.OS === "ios" ? 0.3 : 0.8,
+        shadowRadius: 10,
+        elevation: 6,
+    },
+    nextButtonText: {
+        color: "#fff",
+        fontSize: 18,
+        fontWeight: "600",
+        letterSpacing: 0.5,
+    },
 });

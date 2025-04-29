@@ -21,7 +21,6 @@ import Animated, {
 import ProfileHeader from "@/app/Components/profile/ProfileHeader";
 import StatsCard from "@/app/Components/profile/StatsCard";
 import CourseCard from "@/app/Components/profile/CourseCard";
-import { userProfile, userCourses } from "@/constants/dummyData";
 import { useUser } from "@clerk/clerk-expo";
 import api from "@/app/Services/api";
 
