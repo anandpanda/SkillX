@@ -6,6 +6,7 @@ const StackLayout = () => {
       <Stack.Screen name="index" />
       <Stack.Screen name="/pages/courseDetail" />
       <Stack.Screen name="/pages/LectureContent" />
+      <Stack.Screen name="/pages/jitsiMeetingScreen" />
     </Stack>
   );
 };

@@ -8,6 +8,8 @@ import {
 } from "react-native";
 import React from "react";
 import OptionSection from "./OptionSection";
+import { useRouter } from "expo-router";
+import { useUser } from "@clerk/clerk-expo";
 
 interface Course {
   banner: string;
@@ -32,11 +34,26 @@ const DetailSection = ({
 }: DetailSectionProps) => {
   const level = course?.level;
   const author = course?.author;
-  console.log(course);
+  const router = useRouter();
+  const { user } = useUser();
+
+  const handleJoinMeeting = () => {
+    const roomId = `meet-${course.name.replace(/\s+/g, "-")}`;
+    const userName = user?.fullName || "Guest";
+    router.push({
+      pathname: "/pages/jitsiMeetingScreen",
+      params: {
+        meetingRoom: roomId,
+        userName: userName,
+      },
+    });
+  };
+
   return (
     <View style={styles.CourseDetailSection}>
       <Image source={{ uri: course?.banner }} style={styles.courseImage} />
       <Text style={styles.courseTitle}>{course?.name}</Text>
+
       <View>
         <View style={styles.opt1}>
           <OptionSection
@@ -61,13 +78,15 @@ const DetailSection = ({
         <Text style={styles.courseTitle}>Description</Text>
         <Text style={styles.description}>{course?.description}</Text>
       </View>
+
       <View style={styles.actionbtns}>
         {!isEnrolled ? (
           <TouchableOpacity style={styles.enroll} onPress={enrollCourse}>
             <Text style={styles.action_text}>Enroll For Free</Text>
           </TouchableOpacity>
         ) : null}
-        <TouchableOpacity style={styles.connect}>
+
+        <TouchableOpacity style={styles.connect} onPress={handleJoinMeeting}>
           <Text style={styles.action_text}>Connect With Author</Text>
         </TouchableOpacity>
       </View>
