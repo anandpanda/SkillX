@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   View,
   Text,
@@ -6,11 +6,18 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { Picker } from "@react-native-picker/picker"; // Make sure you installed this!
+import { Picker } from "@react-native-picker/picker";
 import api from "@/app/Services/api";
 import Toast from "react-native-toast-message";
+import * as ImagePicker from "expo-image-picker";
+import { Video } from "expo-av";
+
+const cloudinaryUploadUrl =
+  "https://api.cloudinary.com/v1_1/anandpanda/video/upload";
+const cloudinaryPreset = "skillx";
 
 type Lecture = {
   title: string;
@@ -19,7 +26,6 @@ type Lecture = {
   videoLink: string;
   meetingLink: string;
   scheduledAt: string;
-  duration: string;
 };
 
 const AddLectureScreen = () => {
@@ -32,9 +38,10 @@ const AddLectureScreen = () => {
   const [videoLink, setVideoLink] = useState("");
   const [meetingLink, setMeetingLink] = useState("");
   const [scheduledAt, setScheduledAt] = useState("");
-  const [duration, setDuration] = useState("");
-
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [lectures, setLectures] = useState<Lecture[]>([]);
+  const [loading, setLoading] = useState(false);
+  const videoRef = useRef(null);
 
   const handleAddToList = () => {
     if (!title || !description || !type) {
@@ -53,7 +60,6 @@ const AddLectureScreen = () => {
       videoLink,
       meetingLink,
       scheduledAt,
-      duration,
     };
 
     setLectures((prev) => [...prev, newLecture]);
@@ -65,7 +71,7 @@ const AddLectureScreen = () => {
     setVideoLink("");
     setMeetingLink("");
     setScheduledAt("");
-    setDuration("");
+    setUploadProgress(0);
 
     Toast.show({
       type: "success",
@@ -104,11 +110,66 @@ const AddLectureScreen = () => {
     }
   };
 
+  const handleVideoUpload = async (uri: string) => {
+    setLoading(true);
+    setUploadProgress(0);
+
+    const formData = new FormData();
+    formData.append("file", {
+      uri,
+      name: "video.mp4",
+      type: "video/mp4",
+    });
+    formData.append("upload_preset", cloudinaryPreset);
+
+    try {
+      const response = await fetch(cloudinaryUploadUrl, {
+        method: "POST",
+        body: formData,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      const result = await response.json();
+
+      if (result.secure_url) {
+        setVideoLink(result.secure_url);
+        setUploadProgress(100);
+        Toast.show({
+          type: "success",
+          text1: "Video uploaded successfully",
+        });
+      } else {
+        throw new Error("Invalid response from Cloudinary");
+      }
+    } catch (error) {
+      console.error("Error uploading video:", error);
+      Toast.show({
+        type: "error",
+        text1: "Video upload failed",
+        text2: "Please try again later.",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handlePickVideo = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Videos,
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      handleVideoUpload(result.assets[0].uri);
+    }
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.header}>📖 Add Lecture</Text>
 
-      {/* Form Section */}
       <View style={styles.formContainer}>
         <TextInput
           style={styles.input}
@@ -133,46 +194,74 @@ const AddLectureScreen = () => {
             <Picker.Item label="Live" value="live" />
           </Picker>
         </View>
-        <TextInput
-          style={styles.input}
-          placeholder="Video Link (for recorded)"
-          value={videoLink}
-          onChangeText={setVideoLink}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Meeting Link (for live)"
-          value={meetingLink}
-          onChangeText={setMeetingLink}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Scheduled At (Date Time)"
-          value={scheduledAt}
-          onChangeText={setScheduledAt}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Duration (minutes)"
-          value={duration}
-          onChangeText={setDuration}
-          keyboardType="numeric"
-        />
+
+        {type === "recorded" && (
+          <>
+            <TouchableOpacity
+              style={styles.primaryButton}
+              onPress={handlePickVideo}
+              disabled={loading}
+            >
+              <Text style={styles.buttonText}>
+                {loading
+                  ? "Uploading..."
+                  : videoLink
+                  ? "Uploaded ✅"
+                  : "Upload Video"}
+              </Text>
+            </TouchableOpacity>
+
+            {loading && (
+              <View style={styles.progressContainer}>
+                <ActivityIndicator size="large" color="#007bff" />
+                <Text>Progress: {uploadProgress}%</Text>
+              </View>
+            )}
+
+            {/* Hidden video player for duration extraction */}
+            {videoLink && (
+              <Video
+                ref={videoRef}
+                source={{ uri: videoLink }}
+                shouldPlay={false}
+                isMuted
+                resizeMode="cover"
+                style={{ width: 0, height: 0 }}
+              />
+            )}
+          </>
+        )}
+
+        {type === "live" && (
+          <>
+            <TextInput
+              style={styles.input}
+              placeholder="Meeting Link (for live)"
+              value={meetingLink}
+              onChangeText={setMeetingLink}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Scheduled At (Date Time)"
+              value={scheduledAt}
+              onChangeText={setScheduledAt}
+            />
+          </>
+        )}
       </View>
 
-      {/* Buttons */}
       <TouchableOpacity style={styles.primaryButton} onPress={handleAddToList}>
         <Text style={styles.buttonText}>+ Add to List</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
-        style={styles.secondaryButton}
+        style={[styles.secondaryButton, loading && { opacity: 0.5 }]}
         onPress={handleSubmitAll}
+        disabled={loading}
       >
         <Text style={styles.buttonText}>Submit All</Text>
       </TouchableOpacity>
 
-      {/* Preview Section */}
       {lectures.length > 0 && (
         <View style={styles.previewCard}>
           <Text style={styles.previewTitle}>Lectures Added</Text>
@@ -256,6 +345,10 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
+  },
+  progressContainer: {
+    marginTop: 20,
+    alignItems: "center",
   },
   previewCard: {
     backgroundColor: "#fff",
