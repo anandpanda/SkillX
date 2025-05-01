@@ -21,11 +21,12 @@ import Animated, {
 import ProfileHeader from "@/app/Components/profile/ProfileHeader";
 import StatsCard from "@/app/Components/profile/StatsCard";
 import CourseCard from "@/app/Components/profile/CourseCard";
-import { useUser } from "@clerk/clerk-expo";
+import { useUser, useAuth } from "@clerk/clerk-expo";
 import api from "@/app/Services/api";
 
 export default function ProfileScreen() {
     const { user } = useUser();
+    const { signOut } = useAuth();
     const [userCourses, setUserCourses] = useState([]);
     const [enrolledStudents, setEnrolledStudents] = useState(0);
 
@@ -44,10 +45,10 @@ export default function ProfileScreen() {
     });
 
     const handleCoursePress = (courseId: string) => {
-        router.push({
-            pathname: `/screens/courseDetail`,
-            params: { courseId: item._id },
-        });
+        // router.push({
+        //     pathname: `/screens/courseDetail`,
+        //     params: { courseId: item._id },
+        // });
     };
 
     const handleLogout = () => {
@@ -62,8 +63,13 @@ export default function ProfileScreen() {
                 {
                     text: "Logout",
                     style: "destructive",
-                    onPress: () => {
-                        console.log("User logged out");
+                    onPress: async () => {
+                        try {
+                            await signOut();
+                            router.replace("/(auth)/sign-in");
+                        } catch (error) {
+                            console.error("Error during logout:", error);
+                        }
                     },
                 },
             ],
