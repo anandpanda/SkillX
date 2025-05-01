@@ -9,6 +9,8 @@ interface ProfileHeaderProps {
 }
 
 export default function ProfileHeader({ name, imageUrl }: ProfileHeaderProps) {
+    const defaultImage = "https://via.placeholder.com/100"; // Fallback image URL
+
     return (
         <LinearGradient
             colors={["#3B82F6", "#1E40AF"]}
@@ -20,7 +22,10 @@ export default function ProfileHeader({ name, imageUrl }: ProfileHeaderProps) {
                 style={styles.profileContent}
                 entering={FadeInDown.delay(100).duration(500)}
             >
-                <Image source={{ uri: imageUrl }} style={styles.avatar} />
+                <Image 
+                    source={{ uri: imageUrl || defaultImage }} 
+                    style={styles.avatar} 
+                />
                 <Text style={styles.name}>{name}</Text>
                 <Text style={styles.bio}>
                     Experienced educator with a passion for teaching and making

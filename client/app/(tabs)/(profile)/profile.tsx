@@ -93,6 +93,7 @@ export default function ProfileScreen() {
         fetchCoursesAndStudentsByUser();
     }, []);
 
+
     return (
         <SafeAreaView style={styles.container} edges={["right", "left"]}>
             <Animated.ScrollView
@@ -102,7 +103,10 @@ export default function ProfileScreen() {
                 onScroll={scrollHandler}
                 scrollEventThrottle={16}
             >
-                <ProfileHeader name={user?.fullName} avatar={user?.imageUrl} />
+                <ProfileHeader 
+                    name={user?.fullName || "User"} 
+                    imageUrl={user?.imageUrl || "https://via.placeholder.com/100"} 
+                />
 
                 <View style={styles.content}>
                     {/* Stats Section */}
