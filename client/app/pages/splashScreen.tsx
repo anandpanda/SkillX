@@ -1,5 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import React, { useEffect, useState, useRef } from "react";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  Animated,
+  Dimensions,
+} from "react-native";
 import { useRouter } from "expo-router";
 import { useAuth } from "@clerk/clerk-expo";
 
@@ -7,33 +14,37 @@ export default function SplashScreen() {
   const router = useRouter();
   const { isSignedIn, isLoaded } = useAuth();
   const [showSplash, setShowSplash] = useState(true);
+  const logoScale = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
+    // Animate logo scale in
+    Animated.spring(logoScale, {
+      toValue: 1,
+      friction: 4,
+      tension: 60,
+      useNativeDriver: true,
+    }).start();
+
     const timer = setTimeout(() => {
       setShowSplash(false);
-    }, 1500); // Adjust the duration as needed
+    }, 2000); // Slightly longer for smoother transition
 
     return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
     if (!showSplash && isLoaded) {
-      if (isSignedIn) {
-        router.replace("/(tabs)/(home)");
-      } else {
-        router.replace("/(auth)/sign-in");
-      }
+      router.replace(isSignedIn ? "/(tabs)/(home)" : "/(auth)/sign-in");
     }
   }, [showSplash, isLoaded, isSignedIn]);
 
   if (showSplash) {
     return (
       <View style={styles.splashContainer}>
-        <Image
+        <Animated.Image
           source={require("@/assets/images/logo.png")}
-          style={styles.logo}
+          style={[styles.logo, { transform: [{ scale: logoScale }] }]}
         />
-        <Text style={styles.appName}>SkillX</Text>
       </View>
     );
   }
@@ -46,16 +57,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#fff",
+    backgroundColor: "#fff", // White background
   },
   logo: {
-    width: 100,
-    height: 100,
+    width: 220,
+    height: 220,
     resizeMode: "contain",
-  },
-  appName: {
-    marginTop: 20,
-    fontSize: 20,
-    fontWeight: "bold",
+    marginBottom: 20,
   },
 });

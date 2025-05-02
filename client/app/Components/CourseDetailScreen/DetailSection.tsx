@@ -84,11 +84,11 @@ const DetailSection = ({
           <TouchableOpacity style={styles.enroll} onPress={enrollCourse}>
             <Text style={styles.action_text}>Enroll For Free</Text>
           </TouchableOpacity>
-        ) : null}
-
-        <TouchableOpacity style={styles.connect} onPress={handleJoinMeeting}>
-          <Text style={styles.action_text}>Connect With Author</Text>
-        </TouchableOpacity>
+        ) : (
+          <TouchableOpacity style={styles.connect} onPress={handleJoinMeeting}>
+            <Text style={styles.action_text}>Connect With Author</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );
