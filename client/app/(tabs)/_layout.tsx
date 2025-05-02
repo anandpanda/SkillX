@@ -45,6 +45,7 @@ export default function layout() {
         name="(ai)"
         options={{
           title: "AI",
+          tabBarStyle: { display: "none" },
           tabBarIcon: ({ focused }) => (
             <Image
               source={require("@/assets/images/ai.png")}
@@ -81,6 +82,7 @@ export default function layout() {
         name="(profile)"
         options={{
           title: "Profile",
+          tabBarStyle: { display: "none" },                                                                                                              
           tabBarIcon: ({ focused }) => (
             <Image
               source={require("@/assets/images/user.png")}

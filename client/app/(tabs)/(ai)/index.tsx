@@ -13,13 +13,16 @@ import { useRouter } from "expo-router";
 
 // Import components
 import InterestTags from "@/app/Components/SurpriseScreen/InterestTags";
-import RecommendedCoursesList from "@/app/Components/SurpriseScreen/RecommendedCourseList"
+import RecommendedCoursesList from "@/app/Components/SurpriseScreen/RecommendedCourseList";
 import LoadingAnimation from "@/app/Components/SurpriseScreen/LoadingAnimation";
 
 // Import Gemini service
-import { getRecommendations, getFallbackRecommendations } from "@/app/Services/geminiService";
+import {
+  getRecommendations,
+  getFallbackRecommendations,
+} from "@/app/Services/geminiService";
 
-// Interest list 
+// Interest list
 const interestsList = [
   // Technology & Development
   "Web Development",
@@ -121,7 +124,7 @@ const SurpriseScreen = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [step, setStep] = useState(1); // 1: selecting, 2: loading, 3: showing results
-  
+
   // Create fade animation for transitions
   const fadeAnim = useRef(new Animated.Value(1)).current;
 
@@ -142,7 +145,7 @@ const SurpriseScreen = () => {
       setTimeout(() => setError(null), 3000);
       return;
     }
-    
+
     // Fade out current screen
     Animated.timing(fadeAnim, {
       toValue: 0,
@@ -152,14 +155,14 @@ const SurpriseScreen = () => {
       // Set loading state
       setStep(2);
       setLoading(true);
-      
+
       // Fade in loading screen
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 300,
         useNativeDriver: true,
       }).start();
-      
+
       // Fetch courses
       fetchAndProcessCourses();
     });
@@ -170,19 +173,25 @@ const SurpriseScreen = () => {
       // Fetch all available courses
       const response = await api.get("/courses");
       const allCourses = response.data;
-      
+
       try {
         // Try getting AI recommendations
-        const recommendations = await getRecommendations(selectedInterests, allCourses);
+        const recommendations = await getRecommendations(
+          selectedInterests,
+          allCourses
+        );
         setCourses(recommendations);
       } catch (aiError) {
         console.error("AI recommendation error:", aiError);
-        
+
         // Fallback to tag-based filtering if AI fails
-        const fallbackCourses = getFallbackRecommendations(selectedInterests, allCourses);
+        const fallbackCourses = getFallbackRecommendations(
+          selectedInterests,
+          allCourses
+        );
         setCourses(fallbackCourses);
       }
-      
+
       // Fade out loading screen
       Animated.timing(fadeAnim, {
         toValue: 0,
@@ -192,7 +201,7 @@ const SurpriseScreen = () => {
         // Show results
         setStep(3);
         setLoading(false);
-        
+
         // Fade in results screen
         Animated.timing(fadeAnim, {
           toValue: 1,
@@ -203,7 +212,7 @@ const SurpriseScreen = () => {
     } catch (error) {
       console.error("Error fetching courses:", error);
       setError("Failed to fetch courses. Please try again.");
-      
+
       // Reset to selection screen
       setStep(1);
       setLoading(false);
@@ -221,7 +230,7 @@ const SurpriseScreen = () => {
       setSelectedInterests([]);
       setCourses([]);
       setStep(1);
-      
+
       // Fade in selection screen
       Animated.timing(fadeAnim, {
         toValue: 1,
@@ -237,18 +246,13 @@ const SurpriseScreen = () => {
       case 1: // Selection screen
         return (
           <Animated.View style={{ opacity: fadeAnim, flex: 1 }}>
-            <Text style={styles.heading}>Tell us your Interests ✨</Text>
-            <Text style={styles.heading2}>and get AI recommendations</Text>
-            
-            <InterestTags 
-              interestsList={interestsList} 
-              selectedInterests={selectedInterests} 
-              toggleInterest={toggleInterest} 
+            <Text style={styles.heading}>Tell us your Interests ✨</Text>{" "}
+            <InterestTags
+              interestsList={interestsList}
+              selectedInterests={selectedInterests}
+              toggleInterest={toggleInterest}
             />
-            
             {error && <Text style={styles.errorText}>{error}</Text>}
-            
-            
             <TouchableOpacity
               style={styles.surpriseButton}
               onPress={fetchCoursesWithAI}
@@ -260,24 +264,26 @@ const SurpriseScreen = () => {
             </TouchableOpacity>
           </Animated.View>
         );
-        
+
       case 2: // Loading screen
         return (
-          <Animated.View style={{ opacity: fadeAnim, flex: 1, justifyContent: 'center' }}>
+          <Animated.View
+            style={{ opacity: fadeAnim, flex: 1, justifyContent: "center" }}
+          >
             <LoadingAnimation />
           </Animated.View>
         );
-        
+
       case 3: // Results screen
         return (
           <Animated.View style={{ opacity: fadeAnim, flex: 1 }}>
-            <RecommendedCoursesList 
-              courses={courses} 
-              onTryAgain={resetAndTryAgain} 
+            <RecommendedCoursesList
+              courses={courses}
+              onTryAgain={resetAndTryAgain}
             />
           </Animated.View>
         );
-        
+
       default:
         return null;
     }
@@ -304,7 +310,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
     marginTop: 10,
-    marginBottom: 5,
+    marginBottom: 15,
     textAlign: "center",
   },
   heading2: {
