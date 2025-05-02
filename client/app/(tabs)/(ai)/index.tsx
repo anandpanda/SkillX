@@ -1,19 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
-  FlatList,
-  ActivityIndicator,
   Dimensions,
-  ScrollView,
+  Animated,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import api from "@/app/Services/api";
-import CourseCard from "@/app/Components/HomeScreen/CourseCard";
 import { useRouter } from "expo-router";
 
+// Import components
+import InterestTags from "@/app/Components/SurpriseScreen/InterestTags";
+import RecommendedCoursesList from "@/app/Components/SurpriseScreen/RecommendedCourseList";
+import LoadingAnimation from "@/app/Components/SurpriseScreen/LoadingAnimation";
+
+// Import Gemini service
+import {
+  getRecommendations,
+  getFallbackRecommendations,
+} from "@/app/Services/geminiService";
+
+// Interest list
 const interestsList = [
   // Technology & Development
   "Web Development",
@@ -113,7 +122,11 @@ const SurpriseScreen = () => {
   const [selectedInterests, setSelectedInterests] = useState([]);
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [step, setStep] = useState(1); // 1: selecting, 2: showing results
+  const [error, setError] = useState(null);
+  const [step, setStep] = useState(1); // 1: selecting, 2: loading, 3: showing results
+
+  // Create fade animation for transitions
+  const fadeAnim = useRef(new Animated.Value(1)).current;
 
   const toggleInterest = (interest) => {
     if (selectedInterests.includes(interest)) {
@@ -125,130 +138,163 @@ const SurpriseScreen = () => {
     }
   };
 
-  const fetchCourses = async () => {
-    setLoading(true);
-    try {
-      // Fetching courses
-      const response = await api.get("/courses");
-      const data = response.data;
-
-      const filteredCourses = data.filter((course) => {
-        const tags = course.tags || [];
-        return tags.some((tag) =>
-          selectedInterests.some(
-            (interest) => tag.toLowerCase() === interest.toLowerCase()
-          )
-        );
-      });
-
-      console.log(filteredCourses);
-      setCourses(filteredCourses);
-      setStep(2);
-    } catch (error) {
-      console.error(error);
+  const fetchCoursesWithAI = async () => {
+    // Validate selection
+    if (selectedInterests.length === 0) {
+      setError("Please select at least one interest");
+      setTimeout(() => setError(null), 3000);
+      return;
     }
-    setLoading(false);
+
+    // Fade out current screen
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 300,
+      useNativeDriver: true,
+    }).start(() => {
+      // Set loading state
+      setStep(2);
+      setLoading(true);
+
+      // Fade in loading screen
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true,
+      }).start();
+
+      // Fetch courses
+      fetchAndProcessCourses();
+    });
   };
 
-  const renderCourse = ({ item }) => (
-    <TouchableOpacity
-      onPress={() =>
-        router.push({
-          pathname: `/pages/courseDetail`,
-          params: { courseId: item._id },
-        })
+  const fetchAndProcessCourses = async () => {
+    try {
+      // Fetch all available courses
+      const response = await api.get("/courses");
+      const allCourses = response.data;
+
+      try {
+        // Try getting AI recommendations
+        const recommendations = await getRecommendations(
+          selectedInterests,
+          allCourses
+        );
+        setCourses(recommendations);
+      } catch (aiError) {
+        console.error("AI recommendation error:", aiError);
+
+        // Fallback to tag-based filtering if AI fails
+        const fallbackCourses = getFallbackRecommendations(
+          selectedInterests,
+          allCourses
+        );
+        setCourses(fallbackCourses);
       }
-    >
-      <CourseCard item={item} style={styles.courseCard} />
-    </TouchableOpacity>
-  );
+
+      // Fade out loading screen
+      Animated.timing(fadeAnim, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: true,
+      }).start(() => {
+        // Show results
+        setStep(3);
+        setLoading(false);
+
+        // Fade in results screen
+        Animated.timing(fadeAnim, {
+          toValue: 1,
+          duration: 300,
+          useNativeDriver: true,
+        }).start();
+      });
+    } catch (error) {
+      console.error("Error fetching courses:", error);
+      setError("Failed to fetch courses. Please try again.");
+
+      // Reset to selection screen
+      setStep(1);
+      setLoading(false);
+    }
+  };
+
+  const resetAndTryAgain = () => {
+    // Fade out current screen
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 300,
+      useNativeDriver: true,
+    }).start(() => {
+      // Reset state
+      setSelectedInterests([]);
+      setCourses([]);
+      setStep(1);
+
+      // Fade in selection screen
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true,
+      }).start();
+    });
+  };
+
+  // Render different screens based on current step
+  const renderContent = () => {
+    switch (step) {
+      case 1: // Selection screen
+        return (
+          <Animated.View style={{ opacity: fadeAnim, flex: 1 }}>
+            <Text style={styles.heading}>Tell us your Interests ✨</Text>{" "}
+            <InterestTags
+              interestsList={interestsList}
+              selectedInterests={selectedInterests}
+              toggleInterest={toggleInterest}
+            />
+            {error && <Text style={styles.errorText}>{error}</Text>}
+            <TouchableOpacity
+              style={styles.surpriseButton}
+              onPress={fetchCoursesWithAI}
+              disabled={loading}
+            >
+              <Text style={styles.surpriseButtonText}>
+                Get AI Recommendations
+              </Text>
+            </TouchableOpacity>
+          </Animated.View>
+        );
+
+      case 2: // Loading screen
+        return (
+          <Animated.View
+            style={{ opacity: fadeAnim, flex: 1, justifyContent: "center" }}
+          >
+            <LoadingAnimation />
+          </Animated.View>
+        );
+
+      case 3: // Results screen
+        return (
+          <Animated.View style={{ opacity: fadeAnim, flex: 1 }}>
+            <RecommendedCoursesList
+              courses={courses}
+              onTryAgain={resetAndTryAgain}
+            />
+          </Animated.View>
+        );
+
+      default:
+        return null;
+    }
+  };
+
   return (
     <LinearGradient
       colors={["#7F7FD5", "#86A8E7", "#91EAE4"]}
       style={styles.container}
     >
-      {step === 1 ? (
-        <>
-          <Text style={styles.heading}>Tell us your Interests ✨</Text>
-          <Text style={styles.heading2}>and get AI recommendations</Text>
-          <ScrollView
-            contentContainerStyle={styles.interestsContainer}
-            showsVerticalScrollIndicator={false}
-          >
-            {interestsList.map((interest, index) => (
-              <TouchableOpacity
-                key={index}
-                style={[
-                  styles.interestButton,
-                  selectedInterests.includes(interest) && styles.selectedButton,
-                ]}
-                onPress={() => toggleInterest(interest)}
-              >
-                <Text
-                  style={[
-                    styles.interestText,
-                    selectedInterests.includes(interest) && styles.selectedText,
-                  ]}
-                >
-                  {interest}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-          <TouchableOpacity
-            style={styles.surpriseButton}
-            onPress={fetchCourses}
-          >
-            <Text style={styles.surpriseButtonText}>
-              {loading ? "Loading..." : "Surprise Me!"}
-            </Text>
-          </TouchableOpacity>
-        </>
-      ) : (
-        <>
-          {loading ? (
-            <ActivityIndicator size="large" color="#fff" />
-          ) : courses.length === 0 ? (
-            <>
-              <Text style={styles.noCoursesText1}>Oops!!</Text>
-              <Text style={styles.noCoursesText}>
-                No matching courses found 😔
-              </Text>
-              <TouchableOpacity
-                style={styles.tryAgainButton}
-                onPress={() => {
-                  setSelectedInterests([]);
-                  setCourses([]);
-                  setStep(1);
-                }}
-              >
-                <Text style={styles.tryAgainButtonText}>Try Again</Text>
-              </TouchableOpacity>
-            </>
-          ) : (
-            <>
-              <Text style={styles.heading3}>Courses for You 🎯</Text>
-              <FlatList
-                data={courses}
-                renderItem={renderCourse}
-                keyExtractor={(item, index) => index.toString()}
-                contentContainerStyle={styles.courseListContainer}
-                showsVerticalScrollIndicator={false}
-              />
-              <TouchableOpacity
-                style={styles.tryAgainButton}
-                onPress={() => {
-                  setSelectedInterests([]);
-                  setCourses([]);
-                  setStep(1);
-                }}
-              >
-                <Text style={styles.tryAgainButtonText}>Try Again</Text>
-              </TouchableOpacity>
-            </>
-          )}
-        </>
-      )}
+      {renderContent()}
     </LinearGradient>
   );
 };
@@ -260,50 +306,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   heading: {
-    fontSize: 24,
+    fontSize: 28,
     color: "#fff",
     fontWeight: "bold",
-    marginTop: 5,
-    marginBottom: 20,
+    marginTop: 10,
+    marginBottom: 15,
     textAlign: "center",
   },
   heading2: {
     fontSize: 22,
     color: "#fff",
     fontWeight: "bold",
-    marginBottom: 20,
+    marginBottom: 25,
     textAlign: "center",
-  },
-  heading3: {
-    fontSize: 24,
-    color: "#fff",
-    fontWeight: "bold",
-    marginBottom: 20,
-    textAlign: "center",
-  },
-  interestsContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "center",
-    marginBottom: 30,
-  },
-  interestButton: {
-    backgroundColor: "#ffffff50",
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    borderRadius: 20,
-    margin: 8,
-  },
-  selectedButton: {
-    backgroundColor: "#fff",
-  },
-  interestText: {
-    color: "#fff",
-    fontSize: 16,
-  },
-  selectedText: {
-    color: "#7F7FD5",
-    fontWeight: "700",
   },
   surpriseButton: {
     backgroundColor: "#fff",
@@ -311,59 +326,24 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     borderRadius: 30,
     alignSelf: "center",
-    margin: 10,
+    marginVertical: 15,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.15,
+    shadowRadius: 5,
+    elevation: 5,
   },
   surpriseButtonText: {
     color: "#7F7FD5",
     fontSize: 18,
     fontWeight: "bold",
   },
-  courseCard: {
-    width: Dimensions.get("screen").width * 0.79,
-    height: Dimensions.get("screen").height * 0.3,
-    padding: 8,
-  },
-  courseTitle: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#333",
-  },
-  courseAuthor: {
-    fontSize: 14,
-    color: "#777",
-    marginTop: 5,
-  },
-  courseListContainer: {
-    alignItems: "center",
-    gap: 10,
-  },
-  tryAgainButton: {
-    backgroundColor: "#fff",
-    paddingVertical: 12,
-    paddingHorizontal: 25,
-    borderRadius: 25,
-    alignSelf: "center",
-    marginTop: 10,
-    marginBottom: 10,
-  },
-  tryAgainButtonText: {
-    color: "#7F7FD5",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  noCoursesText1: {
-    color: "#fff",
-    fontSize: 28,
-    fontWeight: "600",
+  errorText: {
+    color: "#ffcccc",
     textAlign: "center",
-    marginTop: 230,
-  },
-  noCoursesText: {
-    color: "#fff",
-    fontSize: 28,
-    fontWeight: "600",
-    textAlign: "center",
-    marginBottom: 50,
+    marginVertical: 10,
+    fontSize: 16,
+    fontWeight: "500",
   },
 });
 

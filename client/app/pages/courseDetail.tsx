@@ -72,7 +72,10 @@ const CourseDetail = () => {
         isEnrolled={isEnrolled}
         enrollCourse={enrollToCourse}
       />
-      <LectureSection courseList={courseData?.lectures} />
+      <LectureSection
+        courseList={courseData?.lectures}
+        enrolledStatus={isEnrolled}
+      />
     </ScrollView>
   );
 };
