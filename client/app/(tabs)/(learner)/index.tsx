@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,43 +7,52 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
+import api from "@/app/Services/api";
+import CourseList from "@/app/Components/HomeScreen/CourseList";
+import { useUser } from "@clerk/clerk-expo";
 
-const courses = [
-  {
-    id: "1",
-    title: "Public Relations",
-    date: "Tuesday, 13th",
-    time: "9:00 - 10:30",
-    image:
-      "https://media.geeksforgeeks.org/wp-content/cdn-uploads/20200214165928/Web-Development-Course-Thumbnail.jpg", // Replace with actual image URL
-    progress: "9/10 lecture",
-  },
-  {
-    id: "2",
-    title: "Marketing Theory",
-    date: "Tuesday, 13th",
-    time: "10:45 - 11:45",
-    image:
-      "https://media.geeksforgeeks.org/wp-content/cdn-uploads/20200214165928/Web-Development-Course-Thumbnail.jpg", // Replace with actual image URL
-    progress: "",
-  },
-];
+
+
 
 const LearnerScreen = () => {
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const { user } = useUser();
+  
+
+  const fetchCourses = async () => {
+    try {
+      const { data } =  await api.get("/courses");
+      const enrolledCourses = data.filter((item) =>
+        item.enrolledStudents.includes(user?.id)
+      ); 
+      console.log(enrolledCourses);
+      setCourses(enrolledCourses);
+    } catch (error) {
+      console.error("Error fetching courses:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCourses();
+  }, []);
+
   return (
     <ScrollView>
       <View style={styles.container}>
         {/* Main Course Section */}
         <View style={styles.greetingContainer}>
-          <Text style={styles.greetingText}>Hello, Mia</Text>
+          <Text style={styles.greetingText}>Hello,{user?.fullName} </Text>
         </View>
         <View style={styles.courseContainer}>
           <Text style={styles.sectionTitle}>Your main course</Text>
           <View style={styles.mainCourseBox}>
             <Text style={styles.courseTitle}>Marketing in B2B</Text>
             <Text style={styles.progressText}>Progress 65%</Text>
-            {/* Custom Progress Bar */}
             <View style={styles.progressBarContainer}>
               <View style={[styles.progressBarFill, { width: "65%" }]} />
             </View>
@@ -51,23 +60,12 @@ const LearnerScreen = () => {
         </View>
 
         {/* Upcoming Classes */}
-        <Text style={styles.sectionTitle}>Upcoming classes</Text>
-        <FlatList
-          data={courses}
-          horizontal
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <View style={styles.classCard}>
-              <Image source={{ uri: item.image }} style={styles.classImage} />
-              <Text style={styles.classTitle}>{item.title}</Text>
-              <Text style={styles.classDate}>{item.date}</Text>
-              <Text style={styles.classTime}>{item.time}</Text>
-              {item.progress ? (
-                <Text style={styles.classProgress}>{item.progress}</Text>
-              ) : null}
-            </View>
-          )}
-        />
+        <Text style={styles.sectionTitle}></Text>
+        {loading ? (
+          <ActivityIndicator size="large" color="#F4A261" />
+        ) : (
+          <CourseList title="Enrolled" data={courses}/>   
+        )}
 
         {/* View Schedule Button */}
         <TouchableOpacity style={styles.button}>
@@ -77,6 +75,7 @@ const LearnerScreen = () => {
     </ScrollView>
   );
 };
+
 
 // Styles
 const styles = StyleSheet.create({
