@@ -5,8 +5,9 @@ import {
   Dimensions,
   TouchableOpacity,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import AntDesign from "@expo/vector-icons/AntDesign";
 import { useRouter } from "expo-router";
 
 // Utility function to truncate text after a certain number of characters
@@ -17,34 +18,53 @@ const truncateText = (text, maxLength) => {
   return text;
 };
 
-const LectureSection = ({ courseList }) => {
-  console.log(courseList);
-
+const LectureSection = ({ courseList, enrolledStatus }) => {
   const router = useRouter();
+  const [visitedLectures, setVisitedLectures] = useState([]);
+
   return (
     <View style={styles.LectureContainer}>
       <Text style={styles.title}>Lectures</Text>
-      {courseList.map((item, index) => (
-        <TouchableOpacity
-          key={`${item?._id}-${index}`}
-          onPress={() =>
-            router.push({
-              pathname: `/pages/LectureContent`,
-              params: { lecture: JSON.stringify(item) },
-            })
-          }
-        >
-          <View style={styles.LectureListContainer}>
+      {courseList.map((item, index) => {
+        const isVisited = visitedLectures.includes(index);
+        return (
+          <TouchableOpacity
+            key={`${item?._id}-${index}`}
+            onPress={() => {
+              if (enrolledStatus) {
+                if (!visitedLectures.includes(index)) {
+                  setVisitedLectures((prev) => [...prev, index]);
+                }
+                router.push({
+                  pathname: `/pages/LectureContent`,
+                  params: {
+                    courseList: JSON.stringify(courseList),
+                    lectureIndex: index.toString(),
+                  },
+                });
+              }
+            }}
+            disabled={!enrolledStatus}
+            style={[
+              styles.LectureListContainer,
+              !enrolledStatus && { opacity: 0.6 }, // Dimmed appearance if not enrolled
+              isVisited && styles.visitedLecture,
+            ]}
+          >
             <View style={styles.Lecture}>
               <Text style={styles.textStyle}>Chapter {index + 1}:</Text>
               <Text style={styles.textStyle}>
                 {truncateText(item?.title, 20)}{" "}
               </Text>
             </View>
-            <Ionicons name="lock-closed" size={24} color="gray" />
-          </View>
-        </TouchableOpacity>
-      ))}
+            {enrolledStatus ? (
+              <AntDesign name="play" size={24} color="black" />
+            ) : (
+              <Ionicons name="lock-closed" size={24} color="gray" />
+            )}
+          </TouchableOpacity>
+        );
+      })}
     </View>
   );
 };
@@ -84,5 +104,8 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     marginTop: 5,
     marginBottom: 10,
+  },
+  visitedLecture: {
+    backgroundColor: "rgba(28, 224, 28, 0.2)",
   },
 });

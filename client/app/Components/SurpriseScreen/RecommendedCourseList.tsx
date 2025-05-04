@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   View,
   Text,
@@ -7,27 +7,22 @@ import {
   TouchableOpacity,
   Dimensions,
   Animated,
-} from 'react-native';
-import { useRouter } from 'expo-router';
-import CourseCard from '@/app/Components/HomeScreen/CourseCard';
+} from "react-native";
+import { useRouter } from "expo-router";
+import CourseCard from "@/app/Components/HomeScreen/CourseCard";
 
-const { width } = Dimensions.get('window');
+const { width } = Dimensions.get("window");
 
 const RecommendedCoursesList = ({ courses, onTryAgain }) => {
   const router = useRouter();
-  
+
   // Empty state when no courses are found
   if (courses.length === 0) {
     return (
       <View style={styles.emptyContainer}>
         <Text style={styles.noCoursesText1}>Oops!!</Text>
-        <Text style={styles.noCoursesText}>
-          No matching courses found 😔
-        </Text>
-        <TouchableOpacity
-          style={styles.tryAgainButton}
-          onPress={onTryAgain}
-        >
+        <Text style={styles.noCoursesText}>No matching courses found 😔</Text>
+        <TouchableOpacity style={styles.tryAgainButton} onPress={onTryAgain}>
           <Text style={styles.tryAgainButtonText}>Try Again</Text>
         </TouchableOpacity>
       </View>
@@ -37,17 +32,19 @@ const RecommendedCoursesList = ({ courses, onTryAgain }) => {
   const renderItem = ({ item, index }) => {
     // Calculate animation delay based on index
     const animationDelay = index * 150;
-    
+
     return (
       <Animated.View
         style={[
           styles.courseCardContainer,
           {
             opacity: 1,
-            transform: [{ 
-              translateY: 0
-            }]
-          }
+            transform: [
+              {
+                translateY: 0,
+              },
+            ],
+          },
         ]}
       >
         <TouchableOpacity
@@ -75,10 +72,7 @@ const RecommendedCoursesList = ({ courses, onTryAgain }) => {
         contentContainerStyle={styles.courseListContainer}
         showsVerticalScrollIndicator={false}
       />
-      <TouchableOpacity
-        style={styles.tryAgainButton}
-        onPress={onTryAgain}
-      >
+      <TouchableOpacity style={styles.tryAgainButton} onPress={onTryAgain}>
         <Text style={styles.tryAgainButtonText}>Try Different Interests</Text>
       </TouchableOpacity>
     </View>
@@ -88,14 +82,14 @@ const RecommendedCoursesList = ({ courses, onTryAgain }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: '100%',
+    width: "100%",
   },
   heading: {
     fontSize: 24,
-    color: '#fff',
-    fontWeight: 'bold',
+    color: "#fff",
+    fontWeight: "bold",
     marginBottom: 20,
-    textAlign: 'center',
+    textAlign: "center",
   },
   courseCardContainer: {
     marginBottom: 16,
@@ -103,48 +97,48 @@ const styles = StyleSheet.create({
   courseCard: {
     width: width * 0.85,
     padding: 8,
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    backgroundColor: "rgba(255, 255, 255, 0.95)",
     borderRadius: 12,
   },
   courseListContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     paddingBottom: 20,
   },
   tryAgainButton: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     paddingVertical: 12,
     paddingHorizontal: 25,
     borderRadius: 25,
-    alignSelf: 'center',
+    alignSelf: "center",
     marginTop: 10,
     marginBottom: 20,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 4,
   },
   tryAgainButtonText: {
-    color: '#7F7FD5',
+    color: "#7F7FD5",
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   emptyContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   noCoursesText1: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 28,
-    fontWeight: '600',
-    textAlign: 'center',
+    fontWeight: "600",
+    textAlign: "center",
   },
   noCoursesText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 24,
-    fontWeight: '600',
-    textAlign: 'center',
+    fontWeight: "600",
+    textAlign: "center",
     marginBottom: 30,
   },
 });
