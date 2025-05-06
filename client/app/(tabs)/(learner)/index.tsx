@@ -49,13 +49,11 @@ const LearnerScreen = () => {
           <Text style={styles.greetingText}>Hello,{user?.fullName} </Text>
         </View>
         <View style={styles.courseContainer}>
-          <Text style={styles.sectionTitle}>Your main course</Text>
+          <Text style={styles.sectionTitle}>Courses Enrolled</Text>
           <View style={styles.mainCourseBox}>
-            <Text style={styles.courseTitle}>Marketing in B2B</Text>
-            <Text style={styles.progressText}>Progress 65%</Text>
-            <View style={styles.progressBarContainer}>
-              <View style={[styles.progressBarFill, { width: "65%" }]} />
-            </View>
+          <Text style={styles.sectionTitle}>
+          {courses.length}
+          </Text> 
           </View>
         </View>
 
@@ -68,9 +66,7 @@ const LearnerScreen = () => {
         )}
 
         {/* View Schedule Button */}
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>View the schedule</Text>
-        </TouchableOpacity>
+        
       </View>
     </ScrollView>
   );
