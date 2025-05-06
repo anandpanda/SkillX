@@ -5,13 +5,12 @@ import { Star, Users } from "lucide-react-native";
 interface CourseCardProps {
     course: {
         id: string;
-        title: string;
-        thumbnail: string;
-        students: number;
-        rating: number;
-        price: string;
+        name: string;
+        banner: string;
+        enrolledStudents: any;
+        points: string;
         status: "published" | "draft";
-        lastUpdated: string;
+        publishedAt: string;
     };
     onPress: (id: string) => void;
 }
@@ -24,28 +23,28 @@ export default function CourseCard({ course, onPress }: CourseCardProps) {
             onPress={() => onPress(course.id)}
         >
             <Image
-                source={{ uri: course.thumbnail }}
+                source={{ uri: course.banner }}
                 style={styles.thumbnail}
             />
             <View style={styles.statusContainer}></View>
             <View style={styles.contentContainer}>
                 <Text style={styles.title} numberOfLines={2}>
-                    {course.title}
+                    {course.name}
                 </Text>
                 <View style={styles.statsRow}>
                     <View style={styles.statItem}>
                         <Users size={14} color="#6B7280" />
-                        <Text style={styles.statText}>{course.students}</Text>
+                        <Text style={styles.statText}>{course.enrolledStudents.length}</Text>
                     </View>
                     <View style={styles.statItem}>
                         <Star size={14} color="#F59E0B" />
-                        <Text style={styles.statText}>{course.rating}</Text>
+                        <Text style={styles.statText}>5</Text>
                     </View>
                 </View>
                 <View style={styles.detailsRow}>
-                    <Text style={styles.price}>{course.price}</Text>
+                    <Text style={styles.price}>{course.points} Points</Text>
                     <Text style={styles.updated}>
-                        Updated {course.lastUpdated}
+                        Published At {new Date(course.publishedAt).toLocaleDateString()}
                     </Text>
                 </View>
             </View>

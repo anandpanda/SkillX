@@ -86,13 +86,17 @@ export default function ProfileScreen() {
 
                 setUserCourses(data.courses);
                 setEnrolledStudents(data.studentsCount);
+
+                console.log(
+                    "Courses and students fetched successfully:",
+                    userCourses
+                );
             } catch (error) {
                 console.error("Failed to fetch courses:", error);
             }
         };
         fetchCoursesAndStudentsByUser();
     }, []);
-
 
     return (
         <SafeAreaView style={styles.container} edges={["right", "left"]}>
@@ -103,9 +107,11 @@ export default function ProfileScreen() {
                 onScroll={scrollHandler}
                 scrollEventThrottle={16}
             >
-                <ProfileHeader 
-                    name={user?.fullName || "User"} 
-                    imageUrl={user?.imageUrl || "https://via.placeholder.com/100"} 
+                <ProfileHeader
+                    name={user?.fullName || "User"}
+                    imageUrl={
+                        user?.imageUrl || "https://via.placeholder.com/100"
+                    }
                 />
 
                 <View style={styles.content}>
