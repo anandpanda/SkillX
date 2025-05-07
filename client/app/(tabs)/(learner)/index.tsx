@@ -1,187 +1,153 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
   StyleSheet,
-  FlatList,
-  Image,
-  TouchableOpacity,
   ScrollView,
+  ActivityIndicator,
+  Image,
 } from "react-native";
-
-const courses = [
-  {
-    id: "1",
-    title: "Public Relations",
-    date: "Tuesday, 13th",
-    time: "9:00 - 10:30",
-    image:
-      "https://media.geeksforgeeks.org/wp-content/cdn-uploads/20200214165928/Web-Development-Course-Thumbnail.jpg", // Replace with actual image URL
-    progress: "9/10 lecture",
-  },
-  {
-    id: "2",
-    title: "Marketing Theory",
-    date: "Tuesday, 13th",
-    time: "10:45 - 11:45",
-    image:
-      "https://media.geeksforgeeks.org/wp-content/cdn-uploads/20200214165928/Web-Development-Course-Thumbnail.jpg", // Replace with actual image URL
-    progress: "",
-  },
-];
+import { useUser } from "@clerk/clerk-expo";
+import { Ionicons } from "@expo/vector-icons";
+import CourseList from "@/app/Components/HomeScreen/CourseList";
+import api from "@/app/Services/api";
 
 const LearnerScreen = () => {
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const { user } = useUser();
+
+  const fetchCourses = async () => {
+    try {
+      const { data } = await api.get("/courses");
+      const enrolledCourses = data.filter((item) =>
+        item.enrolledStudents.includes(user?.id)
+      );
+      setCourses(enrolledCourses);
+    } catch (error) {
+      console.error("Error fetching courses:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCourses();
+  }, []);
+
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        {/* Main Course Section */}
-        <View style={styles.greetingContainer}>
-          <Text style={styles.greetingText}>Hello, Mia</Text>
+    <ScrollView style={styles.wrapper}>
+      {/* Header Section */}
+      <View style={styles.header}>
+        <View>
+          <Text style={styles.helloText}>Welcome back,</Text>
+          <Text style={styles.nameText}>{user?.fullName}</Text>
         </View>
-        <View style={styles.courseContainer}>
-          <Text style={styles.sectionTitle}>Your main course</Text>
-          <View style={styles.mainCourseBox}>
-            <Text style={styles.courseTitle}>Marketing in B2B</Text>
-            <Text style={styles.progressText}>Progress 65%</Text>
-            {/* Custom Progress Bar */}
-            <View style={styles.progressBarContainer}>
-              <View style={[styles.progressBarFill, { width: "65%" }]} />
-            </View>
-          </View>
+        <Image source={{ uri: user?.imageUrl }} style={styles.avatar} />
+      </View>
+
+      {/* Motivational Quote */}
+      <Text style={styles.motivation}>
+        🚀 “Keep learning — your future self will thank you.”
+      </Text>
+
+      {/* Courses Overview Card */}
+      <View style={styles.card}>
+        <View style={styles.cardHeader}>
+          <Ionicons name="book-outline" size={24} color="#F4A261" />
+          <Text style={styles.cardTitle}>Courses Enrolled</Text>
         </View>
+        <Text style={styles.courseCount}>{courses.length}</Text>
+      </View>
 
-        {/* Upcoming Classes */}
-        <Text style={styles.sectionTitle}>Upcoming classes</Text>
-        <FlatList
-          data={courses}
-          horizontal
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <View style={styles.classCard}>
-              <Image source={{ uri: item.image }} style={styles.classImage} />
-              <Text style={styles.classTitle}>{item.title}</Text>
-              <Text style={styles.classDate}>{item.date}</Text>
-              <Text style={styles.classTime}>{item.time}</Text>
-              {item.progress ? (
-                <Text style={styles.classProgress}>{item.progress}</Text>
-              ) : null}
-            </View>
-          )}
-        />
-
-        {/* View Schedule Button */}
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>View the schedule</Text>
-        </TouchableOpacity>
+      {/* Courses List */}
+      <Text style={styles.sectionTitle}>Your Learning</Text>
+      <View style={styles.courseListContainer}>
+        {loading ? (
+          <ActivityIndicator size="large" color="#F4A261" />
+        ) : (
+          <CourseList title="Enrolled Courses" data={courses} />
+        )}
       </View>
     </ScrollView>
   );
 };
 
-// Styles
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#ECECEB",
-    padding: 20,
+  wrapper: {
+    backgroundColor: "#F8F9FA",
+    flex: 1,
   },
-  greetingContainer: {
+  header: {
+    backgroundColor: "#6857E8",
+    padding: 20,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 20,
-  },
-  greetingText: {
-    fontSize: 24,
-    fontWeight: "bold",
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
   },
   helloText: {
-    margin: 20,
-    flex: 1,
+    color: "#fff",
+    fontSize: 16,
   },
-  sectionTitle: {
-    fontSize: 18,
+  nameText: {
+    fontSize: 22,
     fontWeight: "bold",
-    marginBottom: 20,
+    color: "#fff",
   },
-  courseContainer: {
-    backgroundColor: "#FFF",
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 20,
+  avatar: {
+    width: 45,
+    height: 45,
+    borderRadius: 50,
+    borderWidth: 2,
+    borderColor: "#fff",
+  },
+  motivation: {
+    fontSize: 14,
+    fontStyle: "italic",
+    marginHorizontal: 20,
+    marginVertical: 40,
+    color: "#333",
+  },
+  card: {
+    backgroundColor: "#fff",
+    marginHorizontal: 20,
+    padding: 20,
+    borderRadius: 12,
+    elevation: 3,
     shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowRadius: 5,
-    elevation: 3,
+    marginBottom: 20,
   },
-  mainCourseBox: {
-    padding: 10,
-  },
-  courseTitle: {
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  progressText: {
-    fontSize: 14,
-    marginVertical: 5,
-  },
-  progressBarContainer: {
-    height: 8,
-    width: "100%",
-    backgroundColor: "#E0E0E0",
-    borderRadius: 5,
-    overflow: "hidden",
-    marginTop: 5,
-  },
-  progressBarFill: {
-    height: "100%",
-    backgroundColor: "#F4A261",
-  },
-  classCard: {
-    backgroundColor: "#FFF",
-    borderRadius: 12,
-    padding: 10,
-    marginRight: 20,
-    width: 225,
-    shadowColor: "#000",
-    // shadowOpacity: 0.1,
-    // shadowRadius: 4,
-    // overflow: 'hidden',
-    elevation: 3,
-  },
-  classImage: {
-    width: "100%",
-    height: 80,
-    borderRadius: 8,
-    marginBottom: 10,
-  },
-  classTitle: {
-    fontSize: 14,
-    fontWeight: "bold",
-  },
-  classDate: {
-    fontSize: 12,
-    color: "gray",
-  },
-  classTime: {
-    fontSize: 12,
-    color: "#F4A261",
-  },
-  classProgress: {
-    fontSize: 12,
-    color: "gray",
-    marginTop: 5,
-  },
-  button: {
-    backgroundColor: "#F4A261",
-    paddingVertical: 12,
+  cardHeader: {
+    flexDirection: "row",
     alignItems: "center",
-    borderRadius: 8,
-    marginTop: 30,
+    marginBottom: 10,
+    justifyContent: "center",
   },
-  buttonText: {
-    color: "#FFF",
-    fontSize: 16,
+  cardTitle: {
+    fontSize: 18,
     fontWeight: "bold",
+    marginLeft: 10,
+    color: "#333",
+  },
+  courseCount: {
+    fontSize: 32,
+    fontWeight: "bold",
+    color: "#6857E8",
+    textAlign: "center",
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginLeft: 15,
+    marginBottom: 2,
+    color: "#333",
+  },
+  courseListContainer: {
+    marginLeft: 15,
   },
 });
 
