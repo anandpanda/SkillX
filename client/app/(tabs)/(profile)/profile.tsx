@@ -81,7 +81,7 @@ export default function ProfileScreen() {
         const fetchCoursesAndStudentsByUser = async () => {
             try {
                 const { data } = await api.get(
-                    `/courses/author/${user?.fullName}`
+                    `/courses/author/${user?.firstName}`
                 );
 
                 setUserCourses(data.courses);
