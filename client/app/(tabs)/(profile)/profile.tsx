@@ -101,7 +101,7 @@ export default function ProfileScreen() {
     return (
         <SafeAreaView style={styles.container} edges={["right", "left"]}>
             <Animated.ScrollView
-                ref={scrollRef}
+                ref={scrollRef as React.RefObject<any>}
                 style={styles.scrollView}
                 showsVerticalScrollIndicator={false}
                 onScroll={scrollHandler}
@@ -143,9 +143,9 @@ export default function ProfileScreen() {
                             showsHorizontalScrollIndicator={false}
                             contentContainerStyle={styles.coursesScrollContent}
                         >
-                            {userCourses.map((course, index) => (
+                            {userCourses.map((course: any, index: number) => (
                                 <Animated.View
-                                    key={course.id}
+                                    key={course?._id ?? course?.id ?? `course-${index}`}
                                     entering={FadeInRight.delay(
                                         400 + index * 100
                                     ).duration(400)}
