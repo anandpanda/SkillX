@@ -66,13 +66,13 @@ const styles = StyleSheet.create({
     borderColor: "#FFFFFF",
   },
   name: {
-    fontFamily: "Inter-Bold",
+    fontWeight: "700",
     fontSize: 22,
     color: "#FFFFFF",
     marginTop: 12,
   },
   bio: {
-    fontFamily: "Inter-Regular",
+    fontWeight: "400",
     fontSize: 14,
     color: "rgba(255, 255, 255, 0.8)",
     marginTop: 4,
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   ratingText: {
-    fontFamily: "Inter-Regular",
+    fontWeight: "400",
     fontSize: 14,
     color: "rgba(255, 255, 255, 0.8)",
   },
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 4,
   },
   badgeText: {
-    fontFamily: "Inter-SemiBold",
+    fontWeight: "600",
     fontSize: 12,
     color: "#FFFFFF",
   },

@@ -35,13 +35,13 @@ const styles = StyleSheet.create({
         marginBottom: 8,
     },
     value: {
-        fontFamily: "Inter-Bold",
+        fontWeight: "700",
         fontSize: 20,
         color: "#1F2937",
         marginBottom: 2,
     },
     label: {
-        fontFamily: "Inter-Regular",
+        fontWeight: "400",
         fontSize: 12,
         color: "#6B7280",
         textAlign: "center",

@@ -84,19 +84,24 @@ export default function ProfileScreen() {
                     `/courses/author/${user?.firstName}`
                 );
 
-                setUserCourses(data.courses);
-                setEnrolledStudents(data.studentsCount);
+                setUserCourses(data.courses || []);
+                setEnrolledStudents(data.studentsCount || 0);
 
                 console.log(
                     "Courses and students fetched successfully:",
-                    userCourses
+                    data.courses
                 );
             } catch (error) {
                 console.error("Failed to fetch courses:", error);
+                setUserCourses([]);
+                setEnrolledStudents(0);
             }
         };
-        fetchCoursesAndStudentsByUser();
-    }, []);
+
+        if (user?.firstName) {
+            fetchCoursesAndStudentsByUser();
+        }
+    }, [user?.firstName]);
 
     return (
         <SafeAreaView style={styles.container} edges={["right", "left"]}>
@@ -145,7 +150,11 @@ export default function ProfileScreen() {
                         >
                             {userCourses.map((course: any, index: number) => (
                                 <Animated.View
-                                    key={course?._id ?? course?.id ?? `course-${index}`}
+                                    key={
+                                        course?._id ??
+                                        course?.id ??
+                                        `course-${index}`
+                                    }
                                     entering={FadeInRight.delay(
                                         400 + index * 100
                                     ).duration(400)}
@@ -204,12 +213,12 @@ const styles = StyleSheet.create({
         marginBottom: 16,
     },
     sectionTitle: {
-        fontFamily: "Inter-Bold",
+        fontWeight: "700",
         fontSize: 18,
         color: "#1F2937",
     },
     viewAllText: {
-        fontFamily: "Inter-Medium",
+        fontWeight: "500",
         fontSize: 14,
         color: "#3B82F6",
     },
@@ -221,7 +230,7 @@ const styles = StyleSheet.create({
         marginBottom: 24,
     },
     settingsTitle: {
-        fontFamily: "Inter-Bold",
+        fontWeight: "700",
         fontSize: 18,
         color: "#1F2937",
         marginBottom: 16,
@@ -233,7 +242,7 @@ const styles = StyleSheet.create({
         marginTop: 8,
     },
     logoutText: {
-        fontFamily: "Inter-Medium",
+        fontWeight: "500",
         fontSize: 16,
         color: "#EF4444",
         marginLeft: 12,

@@ -1,21 +1,31 @@
 {
   "cli": {
-    "version": ">= 5.2.0"
+    "version": ">= 5.2.0",
+    "appVersionSource": "remote"
   },
   "build": {
     "development": {
       "developmentClient": true,
-      "distribution": "internal"
+      "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_test_ZW1pbmVudC1yZWRiaXJkLTM1LmNsZXJrLmFjY291bnRzLmRldiQ"
+      }
     },
     "preview": {
       "distribution": "internal",
       "android": {
         "buildType": "apk"
+      },
+      "env": {
+        "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_test_ZW1pbmVudC1yZWRiaXJkLTM1LmNsZXJrLmFjY291bnRzLmRldiQ"
       }
     },
     "production": {
       "android": {
         "buildType": "apk"
+      },
+      "env": {
+        "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_test_ZW1pbmVudC1yZWRiaXJkLTM1LmNsZXJrLmFjY291bnRzLmRldiQ"
       }
     }
   },
@@ -23,4 +33,3 @@
     "production": {}
   }
 }
-

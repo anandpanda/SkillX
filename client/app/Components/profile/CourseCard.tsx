@@ -83,13 +83,13 @@ const styles = StyleSheet.create({
     statusText: {
         color: "#FFFFFF",
         fontSize: 10,
-        fontFamily: "Inter-Medium",
+        fontWeight: "500",
     },
     contentContainer: {
         padding: 12,
     },
     title: {
-        fontFamily: "Inter-SemiBold",
+        fontWeight: "600",
         fontSize: 16,
         lineHeight: 22,
         color: "#1F2937",
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
         marginRight: 12,
     },
     statText: {
-        fontFamily: "Inter-Regular",
+        fontWeight: "400",
         fontSize: 12,
         color: "#6B7280",
         marginLeft: 4,
@@ -116,12 +116,12 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     price: {
-        fontFamily: "Inter-Bold",
+        fontWeight: "700",
         fontSize: 14,
         color: "#3B82F6",
     },
     updated: {
-        fontFamily: "Inter-Regular",
+        fontWeight: "400",
         fontSize: 11,
         color: "#9CA3AF",
     },
