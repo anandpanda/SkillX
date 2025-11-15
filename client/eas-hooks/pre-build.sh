@@ -12,5 +12,8 @@ if [ -d ".expo" ]; then
   echo "✅ .expo cache deleted"
 fi
 
-echo "✅ Pre-build cleanup complete"
+echo "🚀 Running prebuild..."
+npx expo prebuild --clean
+
+echo "✅ Pre-build cleanup and prebuild complete"
 

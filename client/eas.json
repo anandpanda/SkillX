@@ -16,7 +16,6 @@
       "android": {
         "buildType": "apk"
       },
-      "prebuildCommand": "bash scripts/clean-prebuild.sh",
       "env": {
         "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_test_ZW1pbmVudC1yZWRiaXJkLTM1LmNsZXJrLmFjY291bnRzLmRldiQ"
       }
