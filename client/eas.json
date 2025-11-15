@@ -16,7 +16,7 @@
       "android": {
         "buildType": "apk"
       },
-      "prebuildCommand": "rm -rf android && npx expo prebuild --platform android",
+      "prebuildCommand": "rm -rf android .expo && npx expo prebuild --platform android --clean",
       "env": {
         "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_test_ZW1pbmVudC1yZWRiaXJkLTM1LmNsZXJrLmFjY291bnRzLmRldiQ"
       }
