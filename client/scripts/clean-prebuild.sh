@@ -10,7 +10,7 @@ rm -rf .expo
 echo "✅ .expo cache deleted"
 
 echo "🚀 Running prebuild..."
-npx expo prebuild --platform android --clean
+npx expo prebuild --clean
 
 echo "✅ Prebuild complete"
 
