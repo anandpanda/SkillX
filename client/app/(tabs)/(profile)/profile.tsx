@@ -6,17 +6,10 @@ import {
     TouchableOpacity,
     Text,
     Alert,
-    Animated as RNAnimated,
 } from "react-native";
 import { router, useFocusEffect } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { BookOpen, LogOut, Users } from "lucide-react-native";
-import Animated, {
-    useAnimatedScrollHandler,
-    useSharedValue,
-    FadeInUp,
-    FadeInRight,
-} from "react-native-reanimated";
+import Feather from "@expo/vector-icons/Feather";
 
 import ProfileHeader from "@/app/Components/profile/ProfileHeader";
 import StatsCard from "@/app/Components/profile/StatsCard";
@@ -29,18 +22,12 @@ export default function ProfileScreen() {
     const { signOut } = useAuth();
     const [userCourses, setUserCourses] = useState([]);
     const [enrolledStudents, setEnrolledStudents] = useState(0);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
-    const scrollY = useSharedValue(0);
     const scrollRef = useRef<ScrollView>(null);
 
-    const scrollHandler = useAnimatedScrollHandler({
-        onScroll: (event) => {
-            scrollY.value = event.contentOffset.y;
-        },
-    });
-
     useFocusEffect(() => {
-        // Reset scroll position when tab is focused
         scrollRef.current?.scrollTo({ y: 0, animated: false });
     });
 
@@ -78,39 +65,34 @@ export default function ProfileScreen() {
     };
 
     useEffect(() => {
-        const fetchCoursesAndStudentsByUser = async () => {
-            try {
-                const { data } = await api.get(
-                    `/courses/author/${user?.firstName}`
-                );
+        console.log("ProfileScreen mounted - API call temporarily disabled for debugging");
+        setIsLoading(false);
+        setUserCourses([]);
+        setEnrolledStudents(0);
+    }, []);
 
-                setUserCourses(data.courses || []);
-                setEnrolledStudents(data.studentsCount || 0);
-
-                console.log(
-                    "Courses and students fetched successfully:",
-                    data.courses
-                );
-            } catch (error) {
-                console.error("Failed to fetch courses:", error);
-                setUserCourses([]);
-                setEnrolledStudents(0);
-            }
-        };
-
-        if (user?.firstName) {
-            fetchCoursesAndStudentsByUser();
-        }
-    }, [user?.firstName]);
+    if (isLoading) {
+        return (
+            <SafeAreaView style={styles.container} edges={["right", "left"]}>
+                <ProfileHeader
+                    name={user?.fullName || "User"}
+                    imageUrl={
+                        user?.imageUrl || "https://via.placeholder.com/100"
+                    }
+                />
+                <View style={styles.loadingContainer}>
+                    <Text style={styles.loadingText}>Loading profile...</Text>
+                </View>
+            </SafeAreaView>
+        );
+    }
 
     return (
         <SafeAreaView style={styles.container} edges={["right", "left"]}>
-            <Animated.ScrollView
-                ref={scrollRef as React.RefObject<any>}
+            <ScrollView
+                ref={scrollRef}
                 style={styles.scrollView}
                 showsVerticalScrollIndicator={false}
-                onScroll={scrollHandler}
-                scrollEventThrottle={16}
             >
                 <ProfileHeader
                     name={user?.fullName || "User"}
@@ -120,69 +102,68 @@ export default function ProfileScreen() {
                 />
 
                 <View style={styles.content}>
+                    {error && (
+                        <View style={styles.errorContainer}>
+                            <Text style={styles.errorText}>{error}</Text>
+                        </View>
+                    )}
+
                     {/* Stats Section */}
-                    <Animated.View
-                        style={styles.statsContainer}
-                        entering={FadeInUp.delay(200).duration(500)}
-                    >
+                    <View style={styles.statsContainer}>
                         <StatsCard
-                            icon={<Users size={22} color="#3B82F6" />}
+                            icon={<Feather name="users" size={22} color="#3B82F6" />}
                             value={enrolledStudents.toLocaleString()}
                             label="Students"
                         />
                         <StatsCard
-                            icon={<BookOpen size={22} color="#8B5CF6" />}
+                            icon={<Feather name="book-open" size={22} color="#8B5CF6" />}
                             value={userCourses.length.toLocaleString()}
                             label="Courses"
                         />
-                    </Animated.View>
+                    </View>
 
                     {/* My Courses Section */}
-                    <Animated.View entering={FadeInUp.delay(300).duration(500)}>
+                    <View>
                         <View style={styles.sectionHeader}>
                             <Text style={styles.sectionTitle}>My Courses</Text>
                         </View>
 
-                        <ScrollView
-                            horizontal
-                            showsHorizontalScrollIndicator={false}
-                            contentContainerStyle={styles.coursesScrollContent}
-                        >
-                            {userCourses.map((course: any, index: number) => (
-                                <Animated.View
-                                    key={
-                                        course?._id ??
-                                        course?.id ??
-                                        `course-${index}`
-                                    }
-                                    entering={FadeInRight.delay(
-                                        400 + index * 100
-                                    ).duration(400)}
-                                >
-                                    <CourseCard
-                                        course={course}
-                                        onPress={handleCoursePress}
-                                    />
-                                </Animated.View>
-                            ))}
-                        </ScrollView>
-                    </Animated.View>
+                        {userCourses.length === 0 ? (
+                            <View style={styles.emptyContainer}>
+                                <Text style={styles.emptyText}>No courses yet</Text>
+                            </View>
+                        ) : (
+                            <ScrollView
+                                horizontal
+                                showsHorizontalScrollIndicator={false}
+                                contentContainerStyle={styles.coursesScrollContent}
+                            >
+                                {userCourses.map((course: any, index: number) => (
+                                    <View
+                                        key={course?._id ?? course?.id ?? `course-${index}`}
+                                    >
+                                        <CourseCard
+                                            course={course}
+                                            onPress={handleCoursePress}
+                                        />
+                                    </View>
+                                ))}
+                            </ScrollView>
+                        )}
+                    </View>
 
                     {/* Settings Section */}
-                    <Animated.View
-                        style={styles.settingsContainer}
-                        entering={FadeInUp.delay(600).duration(500)}
-                    >
+                    <View style={styles.settingsContainer}>
                         <TouchableOpacity
                             style={styles.logoutButton}
                             onPress={handleLogout}
                         >
-                            <LogOut size={20} color="#EF4444" />
+                            <Feather name="log-out" size={20} color="#EF4444" />
                             <Text style={styles.logoutText}>Logout</Text>
                         </TouchableOpacity>
-                    </Animated.View>
+                    </View>
                 </View>
-            </Animated.ScrollView>
+            </ScrollView>
         </SafeAreaView>
     );
 }
@@ -199,6 +180,34 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 16,
     },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        padding: 16,
+    },
+    loadingText: {
+        fontSize: 16,
+        color: "#6B7280",
+    },
+    errorContainer: {
+        backgroundColor: "#FEE2E2",
+        padding: 12,
+        borderRadius: 8,
+        marginBottom: 16,
+    },
+    errorText: {
+        color: "#DC2626",
+        fontSize: 14,
+    },
+    emptyContainer: {
+        padding: 24,
+        alignItems: "center",
+    },
+    emptyText: {
+        fontSize: 14,
+        color: "#6B7280",
+    },
     statsContainer: {
         flexDirection: "row",
         justifyContent: "space-between",
@@ -213,13 +222,13 @@ const styles = StyleSheet.create({
         marginBottom: 16,
     },
     sectionTitle: {
-        fontWeight: "700",
         fontSize: 18,
+        fontWeight: "bold",
         color: "#1F2937",
     },
     viewAllText: {
-        fontWeight: "500",
         fontSize: 14,
+        fontWeight: "500",
         color: "#3B82F6",
     },
     coursesScrollContent: {
@@ -230,8 +239,8 @@ const styles = StyleSheet.create({
         marginBottom: 24,
     },
     settingsTitle: {
-        fontWeight: "700",
         fontSize: 18,
+        fontWeight: "bold",
         color: "#1F2937",
         marginBottom: 16,
     },
@@ -242,8 +251,8 @@ const styles = StyleSheet.create({
         marginTop: 8,
     },
     logoutText: {
-        fontWeight: "500",
         fontSize: 16,
+        fontWeight: "500",
         color: "#EF4444",
         marginLeft: 12,
     },

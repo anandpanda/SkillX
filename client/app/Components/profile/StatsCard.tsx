@@ -35,13 +35,12 @@ const styles = StyleSheet.create({
         marginBottom: 8,
     },
     value: {
-        fontWeight: "700",
+        fontWeight: "bold",
         fontSize: 20,
         color: "#1F2937",
         marginBottom: 2,
     },
     label: {
-        fontWeight: "400",
         fontSize: 12,
         color: "#6B7280",
         textAlign: "center",

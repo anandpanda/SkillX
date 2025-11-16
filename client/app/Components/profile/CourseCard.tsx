@@ -7,34 +7,40 @@ interface CourseCardProps {
         id: string;
         name: string;
         banner: string;
-        enrolledStudents: any;
+        enrolledCount: number;
         points: string;
-        status: "published" | "draft";
-        publishedAt: string;
+        status?: "published" | "draft";
+        publishedAt: string | null;
     };
     onPress: (id: string) => void;
 }
 
 export default function CourseCard({ course, onPress }: CourseCardProps) {
+    const enrolledCount = course.enrolledCount ?? 0;
+    const bannerUri = course.banner || "https://via.placeholder.com/600x300";
+    const publishedDate = course.publishedAt 
+        ? new Date(course.publishedAt).toLocaleDateString() 
+        : "—";
+
     return (
         <TouchableOpacity
             style={styles.card}
             activeOpacity={0.7}
-            onPress={() => onPress(course.id)}
+            onPress={() => course.id ? onPress(course.id) : null}
         >
             <Image
-                source={{ uri: course.banner }}
+                source={{ uri: bannerUri }}
                 style={styles.thumbnail}
             />
             <View style={styles.statusContainer}></View>
             <View style={styles.contentContainer}>
                 <Text style={styles.title} numberOfLines={2}>
-                    {course.name}
+                    {course.name || "Untitled Course"}
                 </Text>
                 <View style={styles.statsRow}>
                     <View style={styles.statItem}>
                         <Users size={14} color="#6B7280" />
-                        <Text style={styles.statText}>{course.enrolledStudents.length}</Text>
+                        <Text style={styles.statText}>{enrolledCount}</Text>
                     </View>
                     <View style={styles.statItem}>
                         <Star size={14} color="#F59E0B" />
@@ -42,9 +48,9 @@ export default function CourseCard({ course, onPress }: CourseCardProps) {
                     </View>
                 </View>
                 <View style={styles.detailsRow}>
-                    <Text style={styles.price}>{course.points} Points</Text>
+                    <Text style={styles.price}>{course.points || "0"} Points</Text>
                     <Text style={styles.updated}>
-                        Published At {new Date(course.publishedAt).toLocaleDateString()}
+                        Published At {publishedDate}
                     </Text>
                 </View>
             </View>
@@ -105,7 +111,6 @@ const styles = StyleSheet.create({
         marginRight: 12,
     },
     statText: {
-        fontWeight: "400",
         fontSize: 12,
         color: "#6B7280",
         marginLeft: 4,
@@ -116,12 +121,11 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     price: {
-        fontWeight: "700",
+        fontWeight: "bold",
         fontSize: 14,
         color: "#3B82F6",
     },
     updated: {
-        fontWeight: "400",
         fontSize: 11,
         color: "#9CA3AF",
     },

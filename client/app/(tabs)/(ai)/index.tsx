@@ -246,7 +246,7 @@ const SurpriseScreen = () => {
       case 1: // Selection screen
         return (
           <Animated.View style={{ opacity: fadeAnim, flex: 1 }}>
-            <Text style={styles.heading}>Tell us your Interests ✨</Text>
+            <Text style={styles.heading}>Tell us your Interests ✨</Text>{" "}
             <InterestTags
               interestsList={interestsList}
               selectedInterests={selectedInterests}
