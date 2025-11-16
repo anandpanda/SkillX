@@ -15,24 +15,27 @@ interface CourseCardProps {
 }
 
 const CourseCard: React.FC<CourseCardProps> = ({ item, style }) => {
+  const lectureCount = Array.isArray(item?.lectures) ? item.lectures.length : 0;
+  const bannerUri = item?.banner || "https://via.placeholder.com/600x300";
+  
   return (
     <View style={[styles.card, style]}>
-      <Image source={{ uri: item?.banner }} style={styles.cardImage} />
+      <Image source={{ uri: bannerUri }} style={styles.cardImage} />
       <Text style={styles.courseTitle} numberOfLines={1}>
-        {item?.name}
+        {item?.name || "Untitled Course"}
       </Text>
       <View style={styles.courseDetail}>
         <View style={styles.detailItem}>
           <Feather name="book-open" size={18} color="black" />
-          <Text> {item?.lectures?.length} Lectures</Text>
+          <Text> {lectureCount} Lectures</Text>
         </View>
         <View style={styles.detailItem}>
           <Feather name="clock" size={18} color="black" />
-          <Text>{item?.time}</Text>
+          <Text>{item?.time || "—"}</Text>
         </View>
       </View>
       <Text style={styles.price}>
-        {item?.points === 0 ? "Free" : `${item.points} Points`}
+        {item?.points === 0 ? "Free" : `${item?.points ?? 0} Points`}
       </Text>
     </View>
   );

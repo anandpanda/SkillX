@@ -1,7 +1,6 @@
-import { Image, StyleSheet, Text } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { LinearGradient } from "expo-linear-gradient";
-import Animated, { FadeInDown } from "react-native-reanimated";
 
 interface ProfileHeaderProps {
   name: string;
@@ -9,7 +8,7 @@ interface ProfileHeaderProps {
 }
 
 export default function ProfileHeader({ name, imageUrl }: ProfileHeaderProps) {
-  const defaultImage = "https://via.placeholder.com/100"; // Fallback image URL
+  const defaultImage = "https://via.placeholder.com/100";
 
   return (
     <LinearGradient
@@ -18,10 +17,7 @@ export default function ProfileHeader({ name, imageUrl }: ProfileHeaderProps) {
       end={{ x: 1, y: 1 }}
       style={styles.header}
     >
-      <Animated.View
-        style={styles.profileContent}
-        entering={FadeInDown.delay(100).duration(500)}
-      >
+      <View style={styles.profileContent}>
         <Image
           source={{ uri: imageUrl || defaultImage }}
           style={styles.avatar}
@@ -31,7 +27,7 @@ export default function ProfileHeader({ name, imageUrl }: ProfileHeaderProps) {
           Experienced educator with a passion for teaching and making other's
           lives easier.
         </Text>
-      </Animated.View>
+      </View>
     </LinearGradient>
   );
 }
@@ -66,13 +62,12 @@ const styles = StyleSheet.create({
     borderColor: "#FFFFFF",
   },
   name: {
-    fontFamily: "Inter-Bold",
+    fontWeight: "bold",
     fontSize: 22,
     color: "#FFFFFF",
     marginTop: 12,
   },
   bio: {
-    fontFamily: "Inter-Regular",
     fontSize: 14,
     color: "rgba(255, 255, 255, 0.8)",
     marginTop: 4,

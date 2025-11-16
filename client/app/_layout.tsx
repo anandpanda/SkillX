@@ -1,7 +1,8 @@
-import { ClerkProvider } from "@clerk/clerk-expo";
+import { ClerkProvider, ClerkLoaded } from "@clerk/clerk-expo";
 import { Slot, Stack } from "expo-router";
 import React from "react";
 import Toast from "react-native-toast-message";
+import * as SecureStore from "expo-secure-store";
 
 const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!;
 
@@ -9,11 +10,29 @@ if (!publishableKey) {
   throw new Error("Missing Clerk publishable key.");
 }
 
+const tokenCache = {
+  async getToken(key: string) {
+    try {
+      return await SecureStore.getItemAsync(key);
+    } catch (err) {
+      return null;
+    }
+  },
+  async saveToken(key: string, value: string) {
+    try {
+      await SecureStore.setItemAsync(key, value);
+    } catch (err) {
+    }
+  },
+};
+
 export default function Layout() {
   return (
-    <ClerkProvider publishableKey={publishableKey}>
-      <Stack screenOptions={{ headerShown: false }} />
-      <Toast />
+    <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
+      <ClerkLoaded>
+        <Stack screenOptions={{ headerShown: false }} />
+        <Toast />
+      </ClerkLoaded>
     </ClerkProvider>
   );
 }

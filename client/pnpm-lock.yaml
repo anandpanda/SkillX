@@ -10,7 +10,7 @@ importers:
     dependencies:
       '@clerk/clerk-expo':
         specifier: ^2.8.5
-        version: 2.19.1(c8f9991b956bd1c5fddebcb99105cf25)
+        version: 2.19.1(cofiupvnl6eq653t6cbjmvbxw4)
       '@clerk/types':
         specifier: ^4.48.0
         version: 4.100.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -76,7 +76,7 @@ importers:
         version: 7.0.5(expo@52.0.47(@babel/core@7.28.5)(@babel/preset-env@7.28.5(@babel/core@7.28.5))(@expo/metro-runtime@4.0.1(react-native@0.76.9(@babel/core@7.28.5)(@babel/preset-env@7.28.5(@babel/core@7.28.5))(@types/react@18.3.26)(react@18.3.1)))(graphql@16.12.0)(react-native-webview@13.12.5(react-native@0.76.9(@babel/core@7.28.5)(@babel/preset-env@7.28.5(@babel/core@7.28.5))(@types/react@18.3.26)(react@18.3.1))(react@18.3.1))(react-native@0.76.9(@babel/core@7.28.5)(@babel/preset-env@7.28.5(@babel/core@7.28.5))(@types/react@18.3.26)(react@18.3.1))(react@18.3.1))(react-native@0.76.9(@babel/core@7.28.5)(@babel/preset-env@7.28.5(@babel/core@7.28.5))(@types/react@18.3.26)(react@18.3.1))(react@18.3.1)
       expo-router:
         specifier: ~4.0.20
-        version: 4.0.21(3703dc1849abcfaaf3d7364f22327dbc)
+        version: 4.0.21(v4dhsaokcbyzrsnxyskjwaj5qu)
       expo-screen-orientation:
         specifier: ~8.0.4
         version: 8.0.4(expo@52.0.47(@babel/core@7.28.5)(@babel/preset-env@7.28.5(@babel/core@7.28.5))(@expo/metro-runtime@4.0.1(react-native@0.76.9(@babel/core@7.28.5)(@babel/preset-env@7.28.5(@babel/core@7.28.5))(@types/react@18.3.26)(react@18.3.1)))(graphql@16.12.0)(react-native-webview@13.12.5(react-native@0.76.9(@babel/core@7.28.5)(@babel/preset-env@7.28.5(@babel/core@7.28.5))(@types/react@18.3.26)(react@18.3.1))(react@18.3.1))(react-native@0.76.9(@babel/core@7.28.5)(@babel/preset-env@7.28.5(@babel/core@7.28.5))(@types/react@18.3.26)(react@18.3.1))(react@18.3.1))(react-native@0.76.9(@babel/core@7.28.5)(@babel/preset-env@7.28.5(@babel/core@7.28.5))(@types/react@18.3.26)(react@18.3.1))
@@ -97,7 +97,7 @@ importers:
         version: 2.0.6(expo@52.0.47(@babel/core@7.28.5)(@babel/preset-env@7.28.5(@babel/core@7.28.5))(@expo/metro-runtime@4.0.1(react-native@0.76.9(@babel/core@7.28.5)(@babel/preset-env@7.28.5(@babel/core@7.28.5))(@types/react@18.3.26)(react@18.3.1)))(graphql@16.12.0)(react-native-webview@13.12.5(react-native@0.76.9(@babel/core@7.28.5)(@babel/preset-env@7.28.5(@babel/core@7.28.5))(@types/react@18.3.26)(react@18.3.1))(react@18.3.1))(react-native@0.76.9(@babel/core@7.28.5)(@babel/preset-env@7.28.5(@babel/core@7.28.5))(@types/react@18.3.26)(react@18.3.1))(react@18.3.1))(react-native@0.76.9(@babel/core@7.28.5)(@babel/preset-env@7.28.5(@babel/core@7.28.5))(@types/react@18.3.26)(react@18.3.1))(react@18.3.1)
       expo-video-player:
         specifier: ^2.2.0
-        version: 2.2.0(e8cdb0e738cdb25c32f1644145710df9)
+        version: 2.2.0(b63we3e2xktr2l6ljefs2nggiu)
       expo-web-browser:
         specifier: ~14.0.2
         version: 14.0.2(expo@52.0.47(@babel/core@7.28.5)(@babel/preset-env@7.28.5(@babel/core@7.28.5))(@expo/metro-runtime@4.0.1(react-native@0.76.9(@babel/core@7.28.5)(@babel/preset-env@7.28.5(@babel/core@7.28.5))(@types/react@18.3.26)(react@18.3.1)))(graphql@16.12.0)(react-native-webview@13.12.5(react-native@0.76.9(@babel/core@7.28.5)(@babel/preset-env@7.28.5(@babel/core@7.28.5))(@types/react@18.3.26)(react@18.3.1))(react@18.3.1))(react-native@0.76.9(@babel/core@7.28.5)(@babel/preset-env@7.28.5(@babel/core@7.28.5))(@types/react@18.3.26)(react@18.3.1))(react@18.3.1))(react-native@0.76.9(@babel/core@7.28.5)(@babel/preset-env@7.28.5(@babel/core@7.28.5))(@types/react@18.3.26)(react@18.3.1))
@@ -5990,7 +5990,7 @@ snapshots:
 
   '@bcoe/v8-coverage@0.2.3': {}
 
-  '@clerk/clerk-expo@2.19.1(c8f9991b956bd1c5fddebcb99105cf25)':
+  '@clerk/clerk-expo@2.19.1(cofiupvnl6eq653t6cbjmvbxw4)':
     dependencies:
       '@clerk/clerk-js': 5.108.0(@types/react@18.3.26)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3)(use-sync-external-store@1.6.0(react@18.3.1))
       '@clerk/clerk-react': 5.55.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -8268,7 +8268,7 @@ snapshots:
     dependencies:
       invariant: 2.2.4
 
-  expo-router@4.0.21(3703dc1849abcfaaf3d7364f22327dbc):
+  expo-router@4.0.21(v4dhsaokcbyzrsnxyskjwaj5qu):
     dependencies:
       '@expo/metro-runtime': 4.0.1(react-native@0.76.9(@babel/core@7.28.5)(@babel/preset-env@7.28.5(@babel/core@7.28.5))(@types/react@18.3.26)(react@18.3.1))
       '@expo/server': 0.5.3
@@ -8330,7 +8330,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  expo-video-player@2.2.0(e8cdb0e738cdb25c32f1644145710df9):
+  expo-video-player@2.2.0(b63we3e2xktr2l6ljefs2nggiu):
     dependencies:
       '@react-native-community/slider': 5.1.1
       expo: 52.0.47(@babel/core@7.28.5)(@babel/preset-env@7.28.5(@babel/core@7.28.5))(@expo/metro-runtime@4.0.1(react-native@0.76.9(@babel/core@7.28.5)(@babel/preset-env@7.28.5(@babel/core@7.28.5))(@types/react@18.3.26)(react@18.3.1)))(graphql@16.12.0)(react-native-webview@13.12.5(react-native@0.76.9(@babel/core@7.28.5)(@babel/preset-env@7.28.5(@babel/core@7.28.5))(@types/react@18.3.26)(react@18.3.1))(react@18.3.1))(react-native@0.76.9(@babel/core@7.28.5)(@babel/preset-env@7.28.5(@babel/core@7.28.5))(@types/react@18.3.26)(react@18.3.1))(react@18.3.1)
